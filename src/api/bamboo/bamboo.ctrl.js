@@ -67,6 +67,8 @@ exports.writePost = async (req, res) => {
         ...body,
       });
 
+      colorConsole.green('[BAMBOO] 게시물 작성 API 호출');
+
       const result = {
         status: 200,
         message: '게시물 저장 성공! (pitcure === null)',
