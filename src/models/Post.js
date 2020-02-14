@@ -56,6 +56,13 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false,
   });
 
+  Post.associate = (models) => {
+    Post.belongsTo(models.Member, {
+      foreignKey: 'memberId',
+      onDelete: 'CASCADE',
+    });
+  };
+
   Post.getByIdx = (idx) => Post.findOne({
     where: {
       idx,
