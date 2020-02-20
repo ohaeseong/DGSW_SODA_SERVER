@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     /** 게시물 idx */
     postIdx: {
-      field: 'postIdx',
+      field: 'post_idx',
       type: DataTypes.INTEGER,
       allowNull: false,
     },

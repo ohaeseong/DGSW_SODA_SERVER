@@ -1,9 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
   const Member = sequelize.define('Member', {
-    email: {
-      field: 'email',
+    memberId: {
+      field: 'member_id',
       type: DataTypes.STRING(50),
       allowNull: false,
+      primaryKey: true,
     },
     certification: {
       field: 'certification_check',
