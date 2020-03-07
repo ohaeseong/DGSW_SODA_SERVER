@@ -12,17 +12,17 @@ exports.creatImageUrlDB = async (picture, requestAddress, idx) => {
     // 파일 DB 저장
     models.BambooFile.create(fileData);
 
-    let fileType = fileData.type;
+    const fileType = fileData.type;
 
     const { uploadName } = fileData;
 
     // url 만들기
-    if (fileType.startsWith('.')) {
-      fileType = fileType.substring('1', fileType.length);
-    }
-    if (fileType === 'jpg') {
-      fileType = 'jpeg';
-    }
+    // if (fileType.startsWith('.')) {
+    //   fileType = fileType.substring('1', fileType.length);
+    // }
+    // if (fileType === 'jpg') {
+    //   fileType = 'jpeg';
+    // }
 
     const url = `http://${requestAddress}/image/${fileType}/${uploadName}`;
 
@@ -37,17 +37,17 @@ exports.creatImageUrl = async (picture, requestAddress) => {
       ...value,
     };
 
-    let fileType = fileData.type;
+    const fileType = fileData.type;
 
     const { uploadName } = fileData;
 
     // url 만들기
-    if (fileType.startsWith('.')) {
-      fileType = fileType.substring('1', fileType.length);
-    }
-    if (fileType === 'jpg') {
-      fileType = 'jpeg';
-    }
+    // if (fileType.startsWith('.')) {
+    //   fileType = fileType.substring('1', fileType.length);
+    // }
+    // if (fileType === 'jpg') {
+    //   fileType = 'jpeg';
+    // }
 
     const url = `http://${requestAddress}/image/${fileType}/${uploadName}`;
 
