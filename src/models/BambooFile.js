@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const PostFile = sequelize.define('PostFile', {
+  const BambooFile = sequelize.define('BambooFile', {
     idx: {
       field: 'idx',
       type: DataTypes.INTEGER,
@@ -8,8 +8,8 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
     },
     /** 게시물 idx */
-    postIdx: {
-      field: 'post_idx',
+    bambooIdx: {
+      field: 'bamboo_idx',
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -26,24 +26,24 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
   }, {
-    tablename: 'PostFile',
+    tablename: 'BambooFile',
     timestamps: false,
   });
 
-  PostFile.associate = (models) => {
-    PostFile.belongsTo(models.Post, {
-      foreignKey: 'postIdx',
+  BambooFile.associate = (models) => {
+    BambooFile.belongsTo(models.Bamboo, {
+      foreignKey: 'bambooIdx',
       onDelete: 'CASCADE',
     });
   };
 
-  PostFile.getFiles = (idx) => PostFile.findAll({
+  BambooFile.getFiles = (idx) => BambooFile.findAll({
     where: {
-      postIdx: idx,
+      bambooIdx: idx,
     },
 
     raw: true,
   });
 
-  return PostFile;
+  return BambooFile;
 };

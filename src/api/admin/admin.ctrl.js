@@ -4,7 +4,7 @@ const colorConsole = require('../../lib/log');
 const file = require('../../lib/file');
 const { asyncForeach } = require('../../lib/method');
 
-exports.isAllowPost = async (req, res) => {
+exports.isAllowBamboo = async (req, res) => {
   const { isAllow, idx } = req.body;
   const { auth } = req.decoded;
   const requestAddress = req.get('host');
@@ -40,21 +40,21 @@ exports.isAllowPost = async (req, res) => {
     }
 
     // 게시물 수락 및 페이스북 페이지 업로드
-    const post = await models.Post.getByIdx(idx);
-    const postFile = await models.PostFile.getFiles(post.idx);
+    const bamboo = await models.Bamboo.getByIdx(idx);
+    const bambooFile = await models.BambooFile.getFiles(bamboo.idx);
 
-    if (postFile[0] !== undefined) {
+    if (bambooFile[0] !== undefined) {
       const imageFile = [];
 
       // 첨부할 이미지 url 만들기
-      await file.creatImageUrl(postFile, requestAddress);
+      await file.creatImageUrl(bambooFile, requestAddress);
 
-      postFile.forEach((value) => {
+      bambooFile.forEach((value) => {
         imageFile.push(value.url);
       });
 
       // 게시물 페이스북 업로드
-      const errorCode = await FB.uploadPostWithPhoto(imageFile, post.contents);
+      const errorCode = await FB.uploadPostWithPhoto(imageFile, bamboo.contents);
 
       if (errorCode === 'error') {
         const result = {
@@ -67,12 +67,12 @@ exports.isAllowPost = async (req, res) => {
         return;
       }
 
-      await models.Post.update({
+      await models.Bamboo.update({
         isAllow: 1,
         allowDate: Date.now(),
       }, {
         where: {
-          idx: post.idx,
+          idx: bamboo.idx,
         },
       });
 
@@ -86,16 +86,16 @@ exports.isAllowPost = async (req, res) => {
       return;
     }
 
-    await models.Post.update({
+    await models.Bamboo.update({
       isAllow: 1,
       allowDate: Date.now(),
     }, {
       where: {
-        idx: post.idx,
+        idx: bamboo.idx,
       },
     });
 
-    await FB.uploadPostWithOutPhoto(post.contents);
+    await FB.uploadPostWithOutPhoto(bamboo.contents);
 
     const result = {
       status: 200,
@@ -115,7 +115,7 @@ exports.isAllowPost = async (req, res) => {
   }
 };
 
-exports.getNotAllowPost = async (req, res) => {
+exports.getNotAllowBamboo = async (req, res) => {
   const { auth } = req.decoded;
   const requestAddress = req.get('host');
 
@@ -131,11 +131,11 @@ exports.getNotAllowPost = async (req, res) => {
   }
 
   try {
-    const post = await models.Post.getisAllowPost(0);
-    await asyncForeach(post, async (value) => {
+    const bamboo = await models.Bamboo.getIsAllowBamboo(0);
+    await asyncForeach(bamboo, async (value) => {
       const { idx } = value;
 
-      const fileData = await models.PostFile.getFiles(idx);
+      const fileData = await models.BambooFile.getFiles(idx);
 
       await file.creatImageUrl(fileData, requestAddress);
 
@@ -149,7 +149,7 @@ exports.getNotAllowPost = async (req, res) => {
       status: 200,
       message: '승인 되지 않은 게시물 조회 성공!',
       data: {
-        post,
+        bamboo,
       },
     };
 
@@ -166,7 +166,7 @@ exports.getNotAllowPost = async (req, res) => {
   }
 };
 
-exports.deletePost = async (req, res) => {
+exports.deleteBamboo = async (req, res) => {
   const { idx } = req.query;
   const { auth } = req.decoded;
 
@@ -182,7 +182,7 @@ exports.deletePost = async (req, res) => {
   }
 
   try {
-    await models.Post.destroy({
+    await models.Bamboo.destroy({
       where: { idx },
     });
 

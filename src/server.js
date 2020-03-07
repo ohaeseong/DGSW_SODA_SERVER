@@ -22,7 +22,7 @@ const app = express();
 const server = HTTP.createServer(app);
 
 // middleware
-app.use('/static', express.static(path.join(__dirname, 'pulbic')));
+app.use('/image', express.static(path.join(__dirname, 'public')));
 app.use(cors());
 app.use(express.json());
 app.use(override());

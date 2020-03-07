@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Post = sequelize.define('Post', {
+  const Bamboo = sequelize.define('Bamboo', {
     idx: {
       field: 'idx',
       type: DataTypes.INTEGER,
@@ -8,11 +8,11 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
     },
     /** 제목 */
-    title: {
-      field: 'title',
-      type: DataTypes.STRING(50),
-      allowNull: false,
-    },
+    // title: {
+    //   field: 'title',
+    //   type: DataTypes.STRING(50),
+    //   allowNull: false,
+    // },
     /** 내용 */
     contents: {
       field: 'contents',
@@ -52,25 +52,25 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
   }, {
-    tablename: 'Post',
+    tablename: 'Bamboo',
     timestamps: false,
   });
 
-  Post.associate = (models) => {
-    Post.belongsTo(models.Member, {
-      foreignKey: 'memberId',
-      onDelete: 'CASCADE',
-    });
-  };
+  // Post.associate = (models) => {
+  //   Post.belongsTo(models.Member, {
+  //     foreignKey: 'memberId',
+  //     onDelete: 'CASCADE',
+  //   });
+  // };
 
-  Post.getByIdx = (idx) => Post.findOne({
+  Bamboo.getByIdx = (idx) => Bamboo.findOne({
     where: {
       idx,
     },
     raw: true,
   });
 
-  Post.getisAllowPost = (isAllow) => Post.findAll({
+  Bamboo.getIsAllowBamboo = (isAllow) => Bamboo.findAll({
     where: {
       isAllow,
     },
@@ -78,5 +78,5 @@ module.exports = (sequelize, DataTypes) => {
     raw: true,
   });
 
-  return Post;
+  return Bamboo;
 };

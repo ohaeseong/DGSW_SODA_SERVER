@@ -36,8 +36,7 @@ const uuid = require('uuid');
 exports.uploadImgLocal = multer({
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
-      const filePath = `public/${path.extname(file.originalname).slice(1)}`;
-
+      const filePath = `src/public/${path.extname(file.originalname).slice(1)}`;
       // eslint-disable-next-line no-unused-expressions
       !fs.existsSync(filePath) && fs.mkdirSync(filePath);
       cb(null, filePath);
