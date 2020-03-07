@@ -49,12 +49,12 @@ module.exports = (sequelize, DataTypes) => {
     'idx', 'memberId', 'comment', 'writeTime', 'postIdx', 'isUpdate',
   ];
 
-  PostComment.associate = (models) => {
-    PostComment.belongsTo(models.Post, {
-      foreignKey: 'postIdx',
-      onDelete: 'CASCADE',
-    });
-  };
+  // PostComment.associate = (models) => {
+  //   PostComment.belongsTo(models.Post, {
+  //     foreignKey: 'postIdx',
+  //     onDelete: 'CASCADE',
+  //   });
+  // };
 
   PostComment.getCommentsByPostIdx = (idx) => PostComment.findAll({
     where: {

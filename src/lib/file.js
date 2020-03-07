@@ -5,12 +5,12 @@ const models = require('../models');
 exports.creatImageUrlDB = async (picture, requestAddress, idx) => {
   await asyncForeach(picture, (value) => {
     const fileData = {
-      postIdx: idx,
+      bambooIdx: idx,
       ...value,
     };
 
     // 파일 DB 저장
-    models.PostFile.create(fileData);
+    models.BambooFile.create(fileData);
 
     let fileType = fileData.type;
 

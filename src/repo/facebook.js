@@ -41,6 +41,7 @@ exports.uploadPostWithOutPhoto = (contents) => {
 };
 
 // 사진과 함께 게시물 등록
+// eslint-disable-next-line consistent-return
 exports.uploadPostWithPhoto = async (url, contents) => {
   const fbid = [];
   try {

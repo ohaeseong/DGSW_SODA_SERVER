@@ -1,6 +1,6 @@
 const models = require('../../models');
 const colorConsole = require('../../lib/log');
-const validate = require('../../lib/Validate/post');
+const validate = require('../../lib/Validate/bamboo');
 const file = require('../../lib/file');
 const { asyncForeach } = require('../../lib/method');
 
@@ -9,7 +9,7 @@ exports.writePost = async (req, res) => {
   const requestAddress = req.get('host');
 
   try {
-    await validate.validateWritePost(body);
+    await validate.validateWriteBamboo(body);
   } catch (error) {
     colorConsole.warn(error);
 
@@ -34,7 +34,7 @@ exports.writePost = async (req, res) => {
 
       // 파일 검증
       try {
-        await validate.validatePostFile(body.picture[0]);
+        await validate.validateBambooFile(body.picture[0]);
       } catch (error) {
         colorConsole.warn(error);
 
@@ -49,10 +49,10 @@ exports.writePost = async (req, res) => {
       }
 
       // DB 저장 (게시물)
-      const postData = await models.Post.create(addData);
+      const bambooData = await models.Bamboo.create(addData);
 
       // IMAGE URL 발급
-      await file.creatImageUrlDB(picture, requestAddress, postData.idx);
+      await file.creatImageUrlDB(picture, requestAddress, bambooData.idx);
 
       const result = {
         status: 200,
@@ -63,7 +63,7 @@ exports.writePost = async (req, res) => {
       res.status(200).json(result);
     } else {
       // 게시물 DB저장 (이미지 X)
-      await models.Post.create({
+      await models.Bamboo.create({
         ...body,
       });
 
@@ -91,14 +91,14 @@ exports.getAllowPost = async (req, res) => {
   const requestAddress = req.get('host');
 
   try {
-    const post = await models.Post.getisAllowPost(1);
-    const comment = await models.PostComment.getAllComment();
+    const bamboo = await models.Bamboo.getIsAllowBamboo(1);
+    // const comment = await models.PostCommen.getAllComment();
 
-    await asyncForeach(post, async (value) => {
+    await asyncForeach(bamboo, async (value) => {
       const { idx } = value;
       value.comment = [];
 
-      const fileData = await models.PostFile.getFiles(idx);
+      const fileData = await models.BambooFile.getFiles(idx);
 
       await file.creatImageUrl(fileData, requestAddress);
 
@@ -109,22 +109,22 @@ exports.getAllowPost = async (req, res) => {
       }
       // 게시물 댓글 정보 추가
       // eslint-disable-next-line no-plusplus
-      for (let i = 0; i < comment.length; i++) {
-        if (comment[i].postIdx === idx) {
-          value.comment.push(comment[i]);
+      // for (let i = 0; i < comment.length; i++) {
+      //  if (comment[i].postIdx === idx) {
+      //  value.comment.push(comment[i]);
 
-          if (value.comment.length > 2) {
-            return;
-          }
-        }
-      }
+      // if (value.comment.length > 2) {
+      //  return;
+      // }
+      // }
+    // }
     });
 
     const result = {
       status: 200,
       message: '승인 된 게시물 조회 성공!',
       data: {
-        post,
+        bamboo,
       },
     };
 

@@ -1,9 +1,9 @@
 const BaseJoi = require('@hapi/joi');
 const Joi = BaseJoi.extend(require('@hapi/joi-date'));
 
-exports.validateWritePost = async (body) => {
+exports.validateWriteBamboo = async (body) => {
   const schema = Joi.object().keys({
-    title: Joi.string().required(),
+    memberId: Joi.string().allow(null),
     contents: Joi.string().required(),
     category: Joi.string().required(),
     picture: Joi.any().allow(null),
@@ -16,7 +16,7 @@ exports.validateWritePost = async (body) => {
   }
 };
 
-exports.validatePostFile = async (body) => {
+exports.validateBambooFile = async (body) => {
   const schema = Joi.object().keys({
     uploadName: Joi.string().required(),
     type: Joi.string().required(),
