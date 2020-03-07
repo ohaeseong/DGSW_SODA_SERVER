@@ -33,11 +33,11 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 0,
     },
     /** 카테고리 */
-    category: {
-      field: 'category',
-      type: DataTypes.STRING(50),
-      allowNull: false,
-    },
+    // category: {
+    // field: 'category',
+    // type: DataTypes.STRING(50),
+    // allowNull: false,
+    // },
     /** 업로드 날짜 */
     joinData: {
       field: 'join_date',

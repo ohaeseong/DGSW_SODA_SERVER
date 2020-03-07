@@ -96,7 +96,7 @@ exports.getAllowPost = async (req, res) => {
 
     await asyncForeach(bamboo, async (value) => {
       const { idx } = value;
-      value.comment = [];
+      // value.comment = [];
 
       const fileData = await models.BambooFile.getFiles(idx);
 
