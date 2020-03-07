@@ -23,7 +23,7 @@ exports.isAllowBamboo = async (req, res) => {
   try {
     // 게시물 거절
     if (isAllow === 0) {
-      await models.Post.destroy({
+      await models.Bamboo.destroy({
         where: {
           idx,
         },
