@@ -104,7 +104,7 @@ exports.registerAccount = async (req, res) => {
   }
 
   try {
-    const memberId = await models.Member.findRegisterMemberId(body.email);
+    const memberId = await models.Member.findRegisterMemberId(body.memberId);
 
     if (memberId) {
       const result = {
@@ -117,7 +117,7 @@ exports.registerAccount = async (req, res) => {
       return;
     }
 
-    await models.Member.registerMember(body.email, body.pw, 1, body.name, body.certification);
+    await models.Member.registerMember(body.memberId, body.pw, 1, body.name, body.certification, body.profileImage);
 
     const result = {
       status: 200,

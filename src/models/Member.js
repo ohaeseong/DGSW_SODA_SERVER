@@ -21,18 +21,23 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(100),
       allowNull: false,
     },
+    profileImage: {
+      field: 'profile_image',
+      type: DataTypes.STRING(100),
+      allowNull: true,
+    },
     auth: {
       field: 'auth',
       type: DataTypes.INTEGER(10),
       allowNull: false,
     },
-    joinData: {
+    joinDate: {
       field: 'join_date',
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW,
     },
-    updateData: {
+    updateDate: {
       field: 'update_date',
       type: DataTypes.DATE,
       allowNull: false,
@@ -44,26 +49,27 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Member.findMemberForLogin = (id, pw) => Member.findOne({
-    attributes: ['email', 'certification', 'auth', 'displayName', 'join_date', 'update_date'],
+    attributes: ['memberId', 'certification', 'auth', 'displayName', 'joinDate', 'updateDate', 'profileImage'],
     where: {
-      email: id,
+      memberId: id,
       pw,
     },
 
     raw: true,
   });
 
-  Member.registerMember = (email, pw, auth, name, certification) => Member.create({
-    email,
+  Member.registerMember = (memberId, pw, auth, name, certification, profileImage) => Member.create({
+    memberId,
     pw,
     displayName: name,
     auth,
+    profileImage,
     certification,
   });
 
-  Member.findRegisterMemberId = (email) => Member.findOne({
+  Member.findRegisterMemberId = (memberId) => Member.findOne({
     where: {
-      email,
+      memberId,
     },
     raw: true,
   });
