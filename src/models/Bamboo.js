@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
     // allowNull: false,
     // },
     /** 업로드 날짜 */
-    joinData: {
+    joinDate: {
       field: 'join_date',
       type: DataTypes.DATE,
       allowNull: false,
