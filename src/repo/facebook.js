@@ -23,7 +23,13 @@ const uploadImage = (url) => new Promise((resolve, reject) => {
 });
 
 // 사진 없이 게시물 등록
-exports.uploadPostWithOutPhoto = (contents) => {
+exports.uploadPostWithOutPhoto = (contents, name) => {
+  if (name === null) {
+    contents += '\n\n\n\n 익명 제보';
+  } else {
+    contents += `\n\n\n\n ${name}님 제보`;
+  }
+
   const option = {
     uri: `https://graph.facebook.com/${facebook.pageId}/feed/`,
     method: 'POST',
@@ -42,7 +48,13 @@ exports.uploadPostWithOutPhoto = (contents) => {
 
 // 사진과 함께 게시물 등록
 // eslint-disable-next-line consistent-return
-exports.uploadPostWithPhoto = async (url, contents) => {
+exports.uploadPostWithPhoto = async (url, contents, name) => {
+  if (name === null) {
+    contents += '\n\n\n\n 익명 제보';
+  } else {
+    contents += `\n\n\n\n ${name}님 제보`;
+  }
+
   const fbid = [];
   try {
     // eslint-disable-next-line no-plusplus
