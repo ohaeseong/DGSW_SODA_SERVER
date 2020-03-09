@@ -54,7 +54,7 @@ exports.isAllowBamboo = async (req, res) => {
       });
 
       // 게시물 페이스북 업로드
-      const errorCode = await FB.uploadPostWithPhoto(imageFile, bamboo.contents);
+      const errorCode = await FB.uploadPostWithPhoto(imageFile, bamboo.contents, bamboo.name);
 
       if (errorCode === 'error') {
         const result = {
@@ -95,7 +95,7 @@ exports.isAllowBamboo = async (req, res) => {
       },
     });
 
-    await FB.uploadPostWithOutPhoto(bamboo.contents);
+    await FB.uploadPostWithOutPhoto(bamboo.contents, bamboo.name);
 
     const result = {
       status: 200,
