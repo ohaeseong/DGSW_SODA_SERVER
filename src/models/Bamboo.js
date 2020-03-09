@@ -20,10 +20,22 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     /** 작성자 */
-    memberId: {
-      field: 'member_id',
+    // memberId: {
+    //   field: 'member_id',
+    //   type: DataTypes.STRING(50),
+    //   allowNull: true,
+    // },
+    name: {
+      field: 'name',
       type: DataTypes.STRING(50),
       allowNull: true,
+      defaultValue: null,
+    },
+    profileImage: {
+      field: 'profile_image',
+      type: DataTypes.STRING(100),
+      allowNull: true,
+      defaultValue: null,
     },
     /** 게시글 인증 */
     isAllow: {

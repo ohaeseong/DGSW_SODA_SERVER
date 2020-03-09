@@ -3,7 +3,8 @@ const Joi = BaseJoi.extend(require('@hapi/joi-date'));
 
 exports.validateWriteBamboo = async (body) => {
   const schema = Joi.object().keys({
-    memberId: Joi.string().allow(null),
+    name: Joi.string().allow(null),
+    profileImage: Joi.string().allow(null),
     contents: Joi.string().required(),
     // category: Joi.string().required(),
     picture: Joi.any().allow(null),
