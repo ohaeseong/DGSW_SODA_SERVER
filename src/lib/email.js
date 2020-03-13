@@ -37,7 +37,7 @@ exports.sendEmailCode = (email, code) => {
 
   // 이메일 보내기
   transporter.sendMail(mailOption, (err, info) => {
-    if (err) { console.log(err); throw err; } else {
+    if (err) { console.log(err); throw new Error(err); } else {
       console.log('Message sent : ', info);
     }
   });

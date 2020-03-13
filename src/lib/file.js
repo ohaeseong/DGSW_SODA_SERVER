@@ -2,7 +2,7 @@ const { asyncForeach } = require('../lib/method');
 const models = require('../models');
 
 // url 작성 및 DB저장
-exports.creatImageUrlDB = async (picture, requestAddress, idx) => {
+exports.bambooCreatImageUrlDB = async (picture, requestAddress, idx) => {
   await asyncForeach(picture, (value) => {
     const fileData = {
       bambooIdx: idx,
@@ -23,6 +23,27 @@ exports.creatImageUrlDB = async (picture, requestAddress, idx) => {
     // if (fileType === 'jpg') {
     //   fileType = 'jpeg';
     // }
+
+    const url = `http://${requestAddress}/image/${fileType}/${uploadName}`;
+
+    value.url = url;
+    value.type = fileType;
+  });
+};
+
+exports.sodaPostCreatImageUrlDB = async (picture, requestAddress, idx) => {
+  await asyncForeach(picture, (value) => {
+    const fileData = {
+      sodaIdx: idx,
+      ...value,
+    };
+
+    // 파일 DB 저장
+    models.SodaFile.create(fileData);
+
+    const fileType = fileData.type;
+
+    const { uploadName } = fileData;
 
     const url = `http://${requestAddress}/image/${fileType}/${uploadName}`;
 

@@ -11,6 +11,7 @@ exports.createToken = async (memberId, auth) => {
   const payload = {
     memberId, auth,
   };
+
   const option = { expiresIn: '5 days', issuer: 'dgswbamboo.com', subject: 'token' };
 
   // eslint-disable-next-line no-useless-catch

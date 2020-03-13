@@ -50,7 +50,7 @@ exports.login = async (req, res) => {
       return;
     }
 
-    const token = await tokenLib.createToken(member.email, member.auth);
+    const token = await tokenLib.createToken(member.memberId, member.auth);
 
     const result = {
       status: 200,
