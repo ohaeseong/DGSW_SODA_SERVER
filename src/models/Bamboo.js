@@ -82,13 +82,32 @@ module.exports = (sequelize, DataTypes) => {
     raw: true,
   });
 
-  Bamboo.getIsAllowBamboo = (isAllow) => Bamboo.findAll({
-    where: {
-      isAllow,
-    },
+  Bamboo.getIsAllowBamboo = (isAllow) => {
+    if (isAllow === 0) {
+      return Bamboo.findAll({
+        where: {
+          isAllow,
+        },
+        order: [
+          ['joinDate', 'DESC'],
+        ],
 
-    raw: true,
-  });
+        raw: true,
+      });
+    } if (isAllow === 1) {
+      return Bamboo.findAll({
+        where: {
+          isAllow,
+        },
+        order: [
+          ['allowDate', 'DESC'],
+        ],
+
+        raw: true,
+      });
+    }
+  };
+
 
   return Bamboo;
 };
