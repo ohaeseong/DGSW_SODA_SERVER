@@ -76,6 +76,7 @@ exports.login = async (req, res) => {
 
 exports.registerAccount = async (req, res) => {
   const { body } = req;
+  const requestAddress = req.get('host');
 
   try {
     await validate.validateRegisterUser(body);
@@ -115,6 +116,10 @@ exports.registerAccount = async (req, res) => {
       res.status(409).json(result);
 
       return;
+    }
+
+    if (body.profileImage !== null) {
+      body.profileImage = `http://${requestAddress}/image/${body.profileImage.type}/${body.profileImage.uploadName}`;
     }
 
     await models.Member.registerMember(body.memberId, body.pw, 1, body.name, body.certification, body.profileImage);

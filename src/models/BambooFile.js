@@ -45,5 +45,11 @@ module.exports = (sequelize, DataTypes) => {
     raw: true,
   });
 
+  BambooFile.deleteFile = (idx) => BambooFile.destroy({
+    where: {
+      bambooIdx: idx,
+    },
+  });
+
   return BambooFile;
 };
