@@ -82,9 +82,12 @@ module.exports = (sequelize, DataTypes) => {
     raw: true,
   });
 
-  Bamboo.getIsAllowBamboo = (isAllow) => {
+  // eslint-disable-next-line consistent-return
+  Bamboo.getIsAllowBamboo = (isAllow, requestPage, limit) => {
     if (isAllow === 0) {
       return Bamboo.findAll({
+        offset: requestPage,
+        limit,
         where: {
           isAllow,
         },
@@ -94,8 +97,11 @@ module.exports = (sequelize, DataTypes) => {
 
         raw: true,
       });
-    } if (isAllow === 1) {
+    }
+    if (isAllow === 1) {
       return Bamboo.findAll({
+        offset: requestPage,
+        limit,
         where: {
           isAllow,
         },

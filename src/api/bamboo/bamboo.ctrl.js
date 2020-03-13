@@ -4,7 +4,7 @@ const validate = require('../../lib/Validate/bamboo');
 const file = require('../../lib/file');
 const { asyncForeach } = require('../../lib/method');
 
-exports.writePost = async (req, res) => {
+exports.writeBamboo = async (req, res) => {
   const { body } = req;
   const requestAddress = req.get('host');
 
@@ -52,7 +52,7 @@ exports.writePost = async (req, res) => {
       const bambooData = await models.Bamboo.create(addData);
 
       // IMAGE URL 발급
-      await file.creatImageUrlDB(picture, requestAddress, bambooData.idx);
+      await file.bambooCreatImageUrlDB(picture, requestAddress, bambooData.idx);
 
       const result = {
         status: 200,
@@ -87,11 +87,27 @@ exports.writePost = async (req, res) => {
   }
 };
 
-exports.getAllowPost = async (req, res) => {
+exports.getAllowBamboo = async (req, res) => {
   const requestAddress = req.get('host');
-
+  const { query } = req;
+  let { limit } = query;
+  const { page } = query;
   try {
-    const bamboo = await models.Bamboo.getIsAllowBamboo(1);
+    if (!limit || !page) {
+      const result = {
+        status: 400,
+        message: 'limit 혹은 page를 지정해주세요.',
+      };
+
+      res.status(400).json(result);
+
+      return;
+    }
+
+    const requestPage = (page - 1) * limit;
+    limit = Number(limit);
+
+    const bamboo = await models.Bamboo.getIsAllowBamboo(1, requestPage, limit);
     // const comment = await models.PostCommen.getAllComment();
 
     await asyncForeach(bamboo, async (value) => {
@@ -107,17 +123,6 @@ exports.getAllowPost = async (req, res) => {
       } else {
         value.picture = null;
       }
-      // 게시물 댓글 정보 추가
-      // eslint-disable-next-line no-plusplus
-      // for (let i = 0; i < comment.length; i++) {
-      //  if (comment[i].postIdx === idx) {
-      //  value.comment.push(comment[i]);
-
-      // if (value.comment.length > 2) {
-      //  return;
-      // }
-      // }
-    // }
     });
 
     const result = {
@@ -130,6 +135,8 @@ exports.getAllowPost = async (req, res) => {
 
     res.status(200).json(result);
   } catch (error) {
+    colorConsole.error(error);
+
     const result = {
       status: 500,
       message: '서버 에러!',

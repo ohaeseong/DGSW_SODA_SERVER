@@ -8,8 +8,8 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
     },
     /* foreign key - 분실물 게시물 idx */
-    postIdx: {
-      field: 'post_idx',
+    sodaIdx: {
+      field: 'soda_idx',
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -49,33 +49,33 @@ module.exports = (sequelize, DataTypes) => {
     'idx', 'memberId', 'comment', 'writeTime', 'postIdx', 'isUpdate',
   ];
 
-  // PostComment.associate = (models) => {
-  //   PostComment.belongsTo(models.Post, {
-  //     foreignKey: 'postIdx',
-  //     onDelete: 'CASCADE',
-  //   });
-  // };
+  PostComment.associate = (models) => {
+    PostComment.belongsTo(models.SodaPost, {
+      foreignKey: 'sodaIdx',
+      onDelete: 'CASCADE',
+    });
 
-  PostComment.getCommentsByPostIdx = (idx) => PostComment.findAll({
-    where: {
-      postIdx: idx,
-    },
+    PostComment.getCommentsByPostIdx = (idx) => PostComment.findAll({
+      where: {
+        sodaIdx: idx,
+      },
 
-    raw: true,
-  });
+      raw: true,
+    });
 
-  PostComment.getCommentByIdx = (idx, memberId) => PostComment.findOne({
-    where: {
-      idx,
-      memberId,
-    },
+    PostComment.getCommentByIdx = (idx, memberId) => PostComment.findOne({
+      where: {
+        idx,
+        memberId,
+      },
 
-    raw: true,
-  });
+      raw: true,
+    });
 
-  PostComment.getAllComment = () => PostComment.findAll({
-    raw: true,
-  });
+    PostComment.getAllComment = () => PostComment.findAll({
+      raw: true,
+    });
+  };
 
   return PostComment;
 };
