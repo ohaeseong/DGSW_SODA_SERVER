@@ -1828,7 +1828,7 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2:
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.3.tgz#4a12ff1b60376ef09862c2093edd908328be8423"
   integrity sha512-a30VEBm4PEdx1dRB7MFK7BejejvCvBronbLjht+sHuGYj8PHs7M/5Z+rt5lw551vZ7yfTCj4Vuyy3mSJytDWRQ==
 
-greenlock-express@^2.0.9, greenlock-express@^2.7.18:
+greenlock-express@^2.0.9:
   version "2.7.18"
   resolved "https://registry.yarnpkg.com/greenlock-express/-/greenlock-express-2.7.18.tgz#3b212ca4b34ee5fac1b703ae53a78ec56252adf6"
   integrity sha512-8gOSo4twkd4Fdmc45jfHMCXdsYnYutcUGDKZ+FRZH8XQc712glqYNrWaeWThmh0QQ/ZEiV+WGROtAdGrY5sGlQ==
