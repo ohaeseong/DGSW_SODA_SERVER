@@ -6,7 +6,7 @@ exports.validateRegisterUser = async (body) => {
     memberId: Joi.string().email().required(),
     pw: Joi.string().required(),
     name: Joi.string().required(),
-    profileImage: Joi.string().allow(null),
+    profileImage: Joi.any().allow(null),
     certification: Joi.boolean().required(),
   });
   // eslint-disable-next-line no-useless-catch

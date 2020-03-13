@@ -21,11 +21,17 @@ exports.isAllowBamboo = async (req, res) => {
   }
 
   try {
+    // 게시물 수락 및 페이스북 페이지 업로드
+    const bamboo = await models.Bamboo.getByIdx(idx);
+    const bambooFile = await models.BambooFile.getFiles(bamboo.idx);
+
     // 게시물 거절
     if (isAllow === 0) {
-      await models.Bamboo.destroy({
+      await models.Bamboo.update({
+        isAllow: 2,
+      }, {
         where: {
-          idx,
+          idx: bamboo.idx,
         },
       });
 
@@ -38,10 +44,6 @@ exports.isAllowBamboo = async (req, res) => {
 
       return;
     }
-
-    // 게시물 수락 및 페이스북 페이지 업로드
-    const bamboo = await models.Bamboo.getByIdx(idx);
-    const bambooFile = await models.BambooFile.getFiles(bamboo.idx);
 
     if (bambooFile[0] !== undefined) {
       const imageFile = [];
@@ -59,7 +61,7 @@ exports.isAllowBamboo = async (req, res) => {
       if (errorCode === 'error') {
         const result = {
           status: 500,
-          message: '파일 첨부 중 에러!',
+          message: '페이스북 업로드 중 에러!',
         };
 
         res.status(500).json(result);
@@ -185,6 +187,8 @@ exports.deleteBamboo = async (req, res) => {
     await models.Bamboo.destroy({
       where: { idx },
     });
+
+    await models.BambooFile.deleteFile(idx);
 
     const result = {
       status: 200,
