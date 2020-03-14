@@ -54,7 +54,7 @@ server.listen(port, () => {
 //   colorConsole.green('[HTTPS] on');
 // });
 
-console.log(fs.readFileSync(path.resolve(process.cwd(), 'keys/takeup.co.kr_20200210NO36.crt.pem'), 'utf8').toString());
+// console.log(fs.readFileSync(path.resolve(process.cwd(), 'keys/takeup.co.kr_20200210NO36.crt.pem'), 'utf8').toString());
 
 
 try {
