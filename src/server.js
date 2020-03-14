@@ -8,7 +8,7 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 // const greenLock = require('greenlock-express');
-const createServer = require('auto-sni');
+// const createServer = require('auto-sni');
 // eslint-disable-next-line import/no-extraneous-dependencies
 const colors = require('colors');
 const override = require('method-override');
@@ -23,17 +23,17 @@ const { SSLPORT: sslport } = process.env;
 const app = express();
 const server = HTTP.createServer(app);
 // eslint-disable-next-line import/order
-const httpsServer = createServer({
-  email: 'gotjd2720@gamil.com', // Emailed when certificates expire.
-  agreeTos: true, // Required for letsencrypt.
-  debug: false, // Add console messages and uses staging LetsEncrypt server. (Disable in production)
-  domains: ["takeup.co.kr", ["takeup.com", "www.takeup.com"]], // List of accepted domain names. (You can use nested arrays to register bundles with LE).
-  dir: "/letsencrypt/etc", // Directory for storing certificates. Defaults to "~/letsencrypt/etc" if not present.
-  ports: {
-    http: 80, // Optionally override the default http port.
-    https: 443, // // Optionally override the default https port.
-  },
-}, app);
+// const httpsServer = createServer({
+//   email: 'gotjd2720@gamil.com', // Emailed when certificates expire.
+//   agreeTos: true, // Required for letsencrypt.
+//   debug: false, // Add console messages and uses staging LetsEncrypt server. (Disable in production)
+//   domains: ["takeup.co.kr", ["takeup.com", "www.takeup.com"]], // List of accepted domain names. (You can use nested arrays to register bundles with LE).
+//   dir: "/letsencrypt/etc", // Directory for storing certificates. Defaults to "~/letsencrypt/etc" if not present.
+//   ports: {
+//     http: 80, // Optionally override the default http port.
+//     https: 443, // // Optionally override the default https port.
+//   },
+// }, app);
 
 // middleware
 app.use('/image', express.static(path.join(__dirname, 'public')));
@@ -50,9 +50,9 @@ server.listen(port, () => {
 });
 
 // HTTPS 서버 열기
-httpsServer.once('listening', () => {
-  colorConsole.green('[HTTPS] on');
-});
+// httpsServer.once('listening', () => {
+//   colorConsole.green('[HTTPS] on');
+// });
 
 // console.log(fs.readFileSync(path.resolve(process.cwd(), 'keys/takeup.co.kr_20200210NO36.crt.pem'), 'utf8').toString());
 
