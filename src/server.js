@@ -54,19 +54,20 @@ server.listen(port, () => {
 //   colorConsole.green('[HTTPS] on');
 // });
 
-// console.log(fs.readFileSync(path.resolve(process.cwd(), 'keys/takeup.co.kr_20200210NO36.crt.pem'), 'utf8').toString());
+console.log(fs.readFileSync(path.resolve(process.cwd(), 'keys/takeup.co.kr_20200210NO36.crt.pem'), 'utf8').toString());
 
 
-// try {
-//   const option = {
-//     key: fs.readFileSync(path.resolve(process.cwd(), 'keys/takeup.co.kr_20200210NO36.key.pem'), 'utf8').toString(),
-//     cert: fs.readFileSync(path.resolve(process.cwd(), 'keys/takeup.co.kr_20200210NO36.crt.pem'), 'utf8').toString(),
-//   };
+try {
+  const option = {
+    ca: fs.readFileSync('/etc/letsencrypt/live/takeup.co.kr/fullchain.pem'),
+    key: fs.readFileSync(path.resolve(process.cwd(), '/etc/letsencrypt/live/takeup.co.kr/privkey.pem'), 'utf8').toString(),
+    cert: fs.readFileSync(path.resolve(process.cwd(), '/etc/letsencrypt/live/takeup.co.kr/cert.pem'), 'utf8').toString(),
+  };
 
-//   HTTPS.createServer(option, app).listen(sslport, () => {
-//     colorConsole.success(`[HTTPS] Soda Server is started on port ${colors.cyan(sslport)}`);
-//   });
-// } catch (error) {
-//   colorConsole.error('[HTTPS] HTTPS 오류가 발생하였습니다. HTTPS 서버는 실행되지 않습니다.');
-//   colorConsole.warn(error);
-// }
+  HTTPS.createServer(option, app).listen(sslport, () => {
+    colorConsole.success(`[HTTPS] Soda Server is started on port ${colors.cyan(sslport)}`);
+  });
+} catch (error) {
+  colorConsole.error('[HTTPS] HTTPS 오류가 발생하였습니다. HTTPS 서버는 실행되지 않습니다.');
+  colorConsole.warn(error);
+}
