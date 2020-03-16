@@ -6,8 +6,6 @@ const bamboo = require('./bamboo');
 const community = require('./community');
 const admin = require('./admin');
 
-const authMiddleware = require('../middleware/auth');
-
 router.use('/auth', auth);
 router.use('/upload', upload);
 router.use('/bamboo', bamboo);

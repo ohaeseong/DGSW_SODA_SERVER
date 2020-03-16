@@ -56,7 +56,6 @@ server.listen(port, () => {
 
 // console.log(fs.readFileSync(path.resolve(process.cwd(), 'keys/takeup.co.kr_20200210NO36.crt.pem'), 'utf8').toString());
 
-
 try {
   const option = {
     ca: fs.readFileSync('/etc/letsencrypt/live/takeup.co.kr/fullchain.pem'),
