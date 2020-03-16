@@ -137,8 +137,10 @@ exports.getPostCategory = async (req, res) => {
         }
       }
 
+      // eslint-disable-next-line no-plusplus
       for (let j = 0; j < postLike.length; j++) {
         if (postLike[j].sodaIdx === idx && postLike[j].isLike === 1) {
+          // eslint-disable-next-line no-plusplus
           post.like++;
         }
       }
@@ -319,8 +321,10 @@ exports.getPosts = async (req, res) => {
         }
       }
 
+      // eslint-disable-next-line no-plusplus
       for (let j = 0; j < postLike.length; j++) {
         if (postLike[j].sodaIdx === idx && postLike[j].isLike === 1) {
+          // eslint-disable-next-line no-plusplus
           post.like++;
         }
       }
