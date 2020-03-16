@@ -26,6 +26,13 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       defaultValue: null,
     },
+    /** 게시물 like */
+    like: {
+      field: 'like',
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
     /** 카테고리 */
     category: {
       field: 'category',

@@ -62,9 +62,11 @@ exports.writePost = async (req, res) => {
       res.status(200).json(result);
     } else {
       // 이미지 없이 게시물 저장
-      await models.SodaPost.create({
+      const postData = await models.SodaPost.create({
         ...addData,
         memberId,
+
+        raw: true,
       });
 
       const result = {
@@ -105,12 +107,14 @@ exports.getPostCategory = async (req, res) => {
     }
 
     const postDatas = await models.SodaPost.getPostByCategory(category);
-
     await asyncForeach(postDatas, async (post) => {
       const { idx } = post;
       post.comment = [];
+      post.like = 0;
 
       const fileData = await models.SodaFile.getFiles(idx);
+      const postLike = await models.SodaPostLike.getPostLikes(idx);
+
       const comment = await models.PostComment.getCommentsByPostIdx(idx);
 
       await file.creatImageUrl(fileData, requestAddress);
@@ -132,6 +136,14 @@ exports.getPostCategory = async (req, res) => {
           // }
         }
       }
+
+      // eslint-disable-next-line no-plusplus
+      for (let j = 0; j < postLike.length; j++) {
+        if (postLike[j].sodaIdx === idx && postLike[j].isLike === 1) {
+          // eslint-disable-next-line no-plusplus
+          post.like++;
+        }
+      }
     });
 
     const result = {
@@ -144,7 +156,7 @@ exports.getPostCategory = async (req, res) => {
 
     res.status(200).json(result);
   } catch (error) {
-    colorConsole(error);
+    colorConsole.error(error);
 
     const result = {
       status: 500,
@@ -283,8 +295,10 @@ exports.getPosts = async (req, res) => {
     await asyncForeach(postData, async (post) => {
       const { idx } = post;
       post.comment = [];
+      post.like = 0;
 
       const fileData = await models.SodaFile.getFiles(idx);
+      const postLike = await models.SodaPostLike.getPostLikes(idx);
       const comment = await models.PostComment.getCommentsByPostIdx(idx);
 
       await file.creatImageUrl(fileData, requestAddress);
@@ -304,6 +318,14 @@ exports.getPosts = async (req, res) => {
           // if (post.comment.length > 2) {
           // return;
           // }
+        }
+      }
+
+      // eslint-disable-next-line no-plusplus
+      for (let j = 0; j < postLike.length; j++) {
+        if (postLike[j].sodaIdx === idx && postLike[j].isLike === 1) {
+          // eslint-disable-next-line no-plusplus
+          post.like++;
         }
       }
     });

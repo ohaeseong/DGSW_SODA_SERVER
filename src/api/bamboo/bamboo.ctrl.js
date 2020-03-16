@@ -94,6 +94,7 @@ exports.getAllowBamboo = async (req, res) => {
   const { query } = req;
   let { limit } = query;
   const { page } = query;
+
   try {
     if (!limit || !page) {
       const result = {

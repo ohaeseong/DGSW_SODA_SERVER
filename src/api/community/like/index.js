@@ -1,6 +1,6 @@
-const like = require('express').Rounter();
+const like = require('express').Router();
 const likeCtrl = require('./like.ctrl');
 
-// like.post('');
+like.post('/is_like', likeCtrl.isLike);
 
 module.exports = like;
