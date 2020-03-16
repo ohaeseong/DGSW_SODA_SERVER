@@ -42,15 +42,6 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  // SodaPostLike.subtractPostLike = (memberId, idx, isLike) => SodaPostLike.update({
-  //   memberId,
-  //   isLike,
-  // }, {
-  // where: {
-  //     sodaIdx: idx,
-  //   },
-  // });
-
   SodaPostLike.getPostLike = (idx, memberId) => SodaPostLike.findOne({
     where: {
       sodaIdx: idx,
