@@ -24,7 +24,7 @@ exports.bambooCreatImageUrlDB = async (picture, requestAddress, idx) => {
     //   fileType = 'jpeg';
     // }
 
-    const url = `http://${requestAddress}/image/${fileType}/${uploadName}`;
+    const url = `https://${requestAddress}/image/${fileType}/${uploadName}`;
 
     value.url = url;
     value.type = fileType;
@@ -45,7 +45,7 @@ exports.sodaPostCreatImageUrlDB = async (picture, requestAddress, idx) => {
 
     const { uploadName } = fileData;
 
-    const url = `http://${requestAddress}/image/${fileType}/${uploadName}`;
+    const url = `https://${requestAddress}/image/${fileType}/${uploadName}`;
 
     value.url = url;
     value.type = fileType;
@@ -70,7 +70,7 @@ exports.creatImageUrl = async (picture, requestAddress) => {
     //   fileType = 'jpeg';
     // }
 
-    const url = `http://${requestAddress}/image/${fileType}/${uploadName}`;
+    const url = `https://${requestAddress}/image/${fileType}/${uploadName}`;
 
     value.url = url;
     value.type = fileType;
