@@ -119,7 +119,7 @@ exports.registerAccount = async (req, res) => {
     }
 
     if (body.profileImage !== null) {
-      body.profileImage = `http://${requestAddress}/image/${body.profileImage.type}/${body.profileImage.uploadName}`;
+      body.profileImage = `https://${requestAddress}/image/${body.profileImage.type}/${body.profileImage.uploadName}`;
     }
 
     await models.Member.registerMember(body.memberId, body.pw, 1, body.name, body.certification, body.profileImage);
