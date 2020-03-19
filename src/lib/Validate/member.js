@@ -8,6 +8,7 @@ exports.validateRegisterUser = async (body) => {
     name: Joi.string().required(),
     profileImage: Joi.any().allow(null),
     certification: Joi.boolean().required(),
+    consent: Joi.boolean().required(),
     email: Joi.string().email().required(),
     nickName: Joi.string().required(),
   });

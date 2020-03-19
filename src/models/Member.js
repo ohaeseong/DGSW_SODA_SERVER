@@ -11,6 +11,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       allowNull: false,
     },
+    consent: {
+      field: 'consent',
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
     pw: {
       field: 'pw',
       type: DataTypes.STRING(1000),
@@ -68,7 +73,7 @@ module.exports = (sequelize, DataTypes) => {
     raw: true,
   });
 
-  Member.registerMember = (memberId, pw, auth, name, certification, profileImage, email, nickName) => Member.create({
+  Member.registerMember = (memberId, pw, auth, name, certification, profileImage, email, nickName, consent) => Member.create({
     memberId,
     pw,
     displayName: name,
@@ -77,6 +82,7 @@ module.exports = (sequelize, DataTypes) => {
     email,
     profileImage,
     certification,
+    consent,
   });
 
   Member.findRegisterMemberId = (memberId) => Member.findOne({
