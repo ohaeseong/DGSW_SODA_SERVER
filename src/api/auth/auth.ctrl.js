@@ -122,7 +122,7 @@ exports.registerAccount = async (req, res) => {
       body.profileImage = `https://${requestAddress}/image/${body.profileImage.type}/${body.profileImage.uploadName}`;
     }
 
-    await models.Member.registerMember(body.memberId, body.pw, 1, body.name, body.certification, body.profileImage);
+    await models.Member.registerMember(body.memberId, body.pw, 1, body.name, body.certification, body.profileImage, body.email, body.nickName);
 
     const result = {
       status: 200,
@@ -146,7 +146,6 @@ exports.registerAccount = async (req, res) => {
 exports.emailVerify = async (req, res) => {
   const { email } = req.body;
   let verifyEmail = null;
-
 
   if (!email) {
     const result = {
@@ -176,6 +175,17 @@ exports.emailVerify = async (req, res) => {
       };
 
       res.status(403).json(result);
+
+      return;
+    }
+    const emailData = await models.Member.findMemberByEmail(email);
+    if (emailData) {
+      const result = {
+        status: 400,
+        message: '이미 회원가입 처리된 이메일 입니다!',
+      };
+
+      res.status(400).json(result);
 
       return;
     }
