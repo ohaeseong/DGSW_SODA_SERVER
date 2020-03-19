@@ -21,6 +21,16 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(100),
       allowNull: false,
     },
+    email: {
+      field: 'email',
+      type: DataTypes.STRING(100),
+      allowNull: false,
+    },
+    nickName: {
+      field: 'nick_name',
+      type: DataTypes.STRING(100),
+      allowNull: false,
+    },
     profileImage: {
       field: 'profile_image',
       type: DataTypes.STRING(100),
@@ -49,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Member.findMemberForLogin = (id, pw) => Member.findOne({
-    attributes: ['memberId', 'certification', 'auth', 'displayName', 'joinDate', 'updateDate', 'profileImage'],
+    attributes: ['memberId', 'certification', 'auth', 'displayName', 'joinDate', 'updateDate', 'profileImage', 'email', 'nickName'],
     where: {
       memberId: id,
       pw,
@@ -58,11 +68,13 @@ module.exports = (sequelize, DataTypes) => {
     raw: true,
   });
 
-  Member.registerMember = (memberId, pw, auth, name, certification, profileImage) => Member.create({
+  Member.registerMember = (memberId, pw, auth, name, certification, profileImage, email, nickName) => Member.create({
     memberId,
     pw,
     displayName: name,
+    nickName,
     auth,
+    email,
     profileImage,
     certification,
   });
@@ -71,6 +83,15 @@ module.exports = (sequelize, DataTypes) => {
     where: {
       memberId,
     },
+
+    raw: true,
+  });
+
+  Member.findMemberByEmail = (email) => Member.findOne({
+    where: {
+      email,
+    },
+
     raw: true,
   });
 
