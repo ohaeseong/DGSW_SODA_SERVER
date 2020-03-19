@@ -104,6 +104,17 @@ exports.registerAccount = async (req, res) => {
     return;
   }
 
+  if (body.consent === false) {
+    const result = {
+      status: 403,
+      message: '개인정보 동의를 해주세요!',
+    };
+
+    res.status(403).json(result);
+
+    return;
+  }
+
   try {
     const memberId = await models.Member.findRegisterMemberId(body.memberId);
 
@@ -122,7 +133,7 @@ exports.registerAccount = async (req, res) => {
       body.profileImage = `https://${requestAddress}/image/${body.profileImage.type}/${body.profileImage.uploadName}`;
     }
 
-    await models.Member.registerMember(body.memberId, body.pw, 1, body.name, body.certification, body.profileImage, body.email, body.nickName);
+    await models.Member.registerMember(body.memberId, body.pw, 1, body.name, body.certification, body.profileImage, body.email, body.nickName, body.consent);
 
     const result = {
       status: 200,
