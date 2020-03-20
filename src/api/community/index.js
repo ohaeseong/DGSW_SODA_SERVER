@@ -5,8 +5,8 @@ const like = require('./like');
 const authMiddleWare = require('../../middleware/auth');
 
 community.post('/', authMiddleWare, communityCtrl.writePost);
-community.get('/kind', authMiddleWare, communityCtrl.getPostCategory);
-community.get('/', authMiddleWare, communityCtrl.getPosts);
+community.get('/kind', communityCtrl.getPostCategory);
+community.get('/', communityCtrl.getPosts);
 community.put('/', authMiddleWare, communityCtrl.updatePost);
 community.delete('/', authMiddleWare, communityCtrl.deletePost);
 

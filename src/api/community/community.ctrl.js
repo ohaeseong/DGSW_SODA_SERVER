@@ -91,10 +91,22 @@ exports.writePost = async (req, res) => {
 
 exports.getPostCategory = async (req, res) => {
   const { query } = req;
-  const { category } = query;
+  const { category, page } = query;
+  let { limit } = query;
   const requestAddress = req.get('host');
 
   try {
+    if (!limit || !page) {
+      const result = {
+        status: 400,
+        message: 'limit 혹은 page를 지정해주세요.',
+      };
+
+      res.status(400).json(result);
+
+      return;
+    }
+
     if (!category) {
       const result = {
         status: 400,
@@ -106,7 +118,11 @@ exports.getPostCategory = async (req, res) => {
       return;
     }
 
-    const postDatas = await models.SodaPost.getPostByCategory(category);
+    const requestPage = (page - 1) * limit;
+    limit = Number(limit);
+
+    const postDatas = await models.SodaPost.getPostByCategory(category, requestPage, limit);
+    const bambooData = await models.Bamboo.getIsAllowBamboo(1, requestPage, limit);
     await asyncForeach(postDatas, async (post) => {
       const { idx } = post;
       post.comment = [];
@@ -151,6 +167,7 @@ exports.getPostCategory = async (req, res) => {
       message: '카테고리별 피드 가져오기 성공!',
       data: {
         postDatas,
+        bambooData,
       },
     };
 
@@ -288,9 +305,27 @@ exports.deletePost = async (req, res) => {
 
 exports.getPosts = async (req, res) => {
   const requestAddress = req.get('host');
+  const { query } = req;
+  let { limit } = query;
+  const { page } = query;
 
   try {
-    const postData = await models.SodaPost.getPosts();
+    if (!limit || !page) {
+      const result = {
+        status: 400,
+        message: 'limit 혹은 page를 지정해주세요.',
+      };
+
+      res.status(400).json(result);
+
+      return;
+    }
+
+    const requestPage = (page - 1) * limit;
+    limit = Number(limit);
+
+    const postData = await models.SodaPost.getPosts(requestPage, limit);
+    const bambooData = await models.Bamboo.getIsAllowBamboo(1, requestPage, limit);
 
     await asyncForeach(postData, async (post) => {
       const { idx } = post;
@@ -335,6 +370,7 @@ exports.getPosts = async (req, res) => {
       message: '불러오기 성공!',
       data: {
         postData,
+        bambooData,
       },
     };
 
