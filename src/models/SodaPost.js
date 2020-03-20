@@ -51,10 +51,15 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false,
   });
 
-  SodaPost.getPostByCategory = (category) => SodaPost.findAll({
+  SodaPost.getPostByCategory = (category, requestPage, limit) => SodaPost.findAll({
+    offset: requestPage,
+    limit,
     where: {
       category,
     },
+    order: [
+      ['joinDate', 'DESC'],
+    ],
 
     raw: true,
   });
@@ -67,7 +72,10 @@ module.exports = (sequelize, DataTypes) => {
     raw: true,
   });
 
-  SodaPost.getPosts = () => SodaPost.findAll({
+  SodaPost.getPosts = (requestPage, limit) => SodaPost.findAll({
+    offset: requestPage,
+    limit,
+
     raw: true,
   });
 
