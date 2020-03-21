@@ -2,9 +2,12 @@ const log = require('../../../lib/log');
 
 exports.uploadImgs = (req, res) => {
   const imgs = [];
+  const { files } = req;
 
   req.files.forEach((file) => {
-    imgs.push(file.filename);
+    const uploadName = file.filename;
+    const fileData = uploadName.split('.');
+    imgs.push({ fileName: fileData[0], fileType: fileData[1] });
   });
 
   const result = {
