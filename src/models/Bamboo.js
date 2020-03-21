@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     profileImage: {
       field: 'profile_image',
-      type: DataTypes.STRING(100),
+      type: DataTypes.STRING(1000),
       allowNull: true,
       defaultValue: null,
     },
