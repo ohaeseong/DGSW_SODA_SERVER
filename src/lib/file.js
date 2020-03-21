@@ -45,7 +45,7 @@ exports.sodaPostCreatImageUrlDB = async (picture, requestAddress, idx) => {
 
     const { uploadName } = fileData;
 
-    const url = `https://${requestAddress}/image/${fileType}/${uploadName}`;
+    const url = `https://${requestAddress}/image/${fileType}/${uploadName}.${fileType}`;
 
     value.url = url;
     value.type = fileType;
@@ -70,7 +70,7 @@ exports.creatImageUrl = async (picture, requestAddress) => {
     //   fileType = 'jpeg';
     // }
 
-    const url = `https://${requestAddress}/image/${fileType}/${uploadName}`;
+    const url = `https://${requestAddress}/image/${fileType}/${uploadName}.${fileType}`;
 
     value.url = url;
     value.type = fileType;
