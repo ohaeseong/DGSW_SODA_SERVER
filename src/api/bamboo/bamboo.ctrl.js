@@ -7,6 +7,7 @@ const { asyncForeach } = require('../../lib/method');
 exports.writeBamboo = async (req, res) => {
   const { body } = req;
   const requestAddress = req.get('host');
+  console.log(body);
 
   try {
     await validate.validateWriteBamboo(body);
