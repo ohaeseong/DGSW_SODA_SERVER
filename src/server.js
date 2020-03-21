@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 require('dotenv').config();
 
-// const HTTP = require('http');
+const HTTP = require('http');
 const HTTPS = require('https');
 const path = require('path');
 const express = require('express');
@@ -19,7 +19,7 @@ const { SSLPORT: sslport } = process.env;
 
 
 const app = express();
-// const server = HTTP.createServer(app);
+const server = HTTP.createServer(app);
 
 // middleware
 app.use('/image', express.static(path.join(__dirname, 'public')));
@@ -31,9 +31,9 @@ app.use(compression());
 // api router
 app.use('/', api);
 
-// server.listen(port, () => {
-// colorConsole.success(`[HTTP] Soda Server is started on port ${colors.cyan(port)}`);
-// });
+server.listen(port, () => {
+  colorConsole.success(`[HTTP] Soda Server is started on port ${colors.cyan(port)}`);
+});
 
 try {
   const option = {
