@@ -90,9 +90,7 @@ exports.getAllowBamboo = async (req, res) => {
   const { query } = req;
   let { limit } = query;
   const { page } = query;
-  const requestAddress = req.get('host');
 
-  console.log(requestAddress);
   try {
     if (!limit || !page) {
       const result = {

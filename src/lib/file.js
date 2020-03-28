@@ -10,7 +10,7 @@ const urlData = (fileData) => {
 
   const { uploadName } = fileData;
 
-  const url = `${requestAddress}/image/${fileType}/${uploadName}`;
+  const url = `${requestAddress}/image/${fileType}/${uploadName}.${fileType}`;
 
   return {
     fileType,
