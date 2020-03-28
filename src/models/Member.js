@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(50),
       allowNull: false,
       primaryKey: true,
+      unique: true,
     },
     certification: {
       field: 'certification_check',

@@ -232,3 +232,38 @@ exports.emailVerify = async (req, res) => {
     res.status(500).json(result);
   }
 };
+
+exports.checkMemberId = async (req, res) => {
+  const { memberId } = req.body;
+
+  try {
+    const member = await models.Member.checkId(memberId);
+
+    if (member) {
+      const result = {
+        status: 400,
+        message: '이미 사용중인 memberId!',
+      };
+
+      res.status(400).json(result);
+
+      return;
+    }
+
+    const result = {
+      status: 200,
+      message: '사용 가능한 memberId!',
+    };
+
+    res.status(200).json(result);
+  } catch (error) {
+    log.error(error);
+
+    const result = {
+      status: 500,
+      message: '서버 에러!',
+    };
+
+    res.status(500).json(result);
+  }
+}

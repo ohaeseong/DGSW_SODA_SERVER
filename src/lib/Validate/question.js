@@ -1,10 +1,10 @@
 const BaseJoi = require('@hapi/joi');
 const Joi = BaseJoi.extend(require('@hapi/joi-date'));
 
-exports.validateWriteSodaPost = async (body) => {
+exports.validateWriteQuestion = async (body) => {
   const schema = Joi.object().keys({
+    title: Joi.string().required(),
     contents: Joi.string().required(),
-    category: Joi.string().required(),
     picture: Joi.any().allow(null),
   });
   // eslint-disable-next-line no-useless-catch
@@ -15,7 +15,7 @@ exports.validateWriteSodaPost = async (body) => {
   }
 };
 
-exports.validateSodaPostFile = async (body) => {
+exports.validateQuestionFile = async (body) => {
   const schema = Joi.object().keys({
     uploadName: Joi.string().required(),
     type: Joi.string().required(),
@@ -28,9 +28,11 @@ exports.validateSodaPostFile = async (body) => {
   }
 };
 
-exports.validateSodaPostUpdate = async (body) => {
+exports.validateQuestionUpdate = async (body) => {
   const schema = Joi.object().keys({
+    title: Joi.string().required(),
     contents: Joi.string().required(),
+    picture: Joi.any().allow(null),
     idx: Joi.number().required(),
   });
   // eslint-disable-next-line no-useless-catch
