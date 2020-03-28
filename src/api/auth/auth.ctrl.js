@@ -51,12 +51,14 @@ exports.login = async (req, res) => {
     }
 
     const token = await tokenLib.createToken(member.memberId, member.auth);
+    const refreshToken = await tokenLib.createRefreshToken(member.memberId, member.auth);
 
     const result = {
       status: 200,
       message: '로그인 성공!',
       data: {
         token,
+        refreshToken,
         member,
       },
     };
