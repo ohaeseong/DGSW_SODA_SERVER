@@ -185,6 +185,100 @@ exports.getAdminQuestion = async (req, res) => {
   }
 };
 
+exports.getByCategory = async (req, res) => {
+  const { category, page } = req.query;
+  let { limit } = req.query;
+
+  if (!page || !limit || !category) {
+    const result = {
+      status: 400,
+      message: 'page or limit or category를 지정 하세요!',
+    };
+
+    res.status(400).json(result);
+
+    return;
+  }
+
+  try {
+    const requestPage = (page - 1) * limit;
+    limit = Number(limit);
+
+    const question = await models.Question.getByCategory(0, category, requestPage, limit);
+
+    const result = {
+      status: 200,
+      message: '카테고리별 조회 성공!',
+      data: {
+        question,
+      },
+    };
+
+    res.status(200).json(result);
+  } catch (error) {
+    colorConsole.error(error);
+    const result = {
+      status: 500,
+      message: '서버 에러!',
+    };
+
+    res.status(500).json(result);
+  }
+};
+
+exports.getByAdminCategory = async (req, res) => {
+  const { auth } = req.decoded;
+  const { category, page } = req.query;
+  let { limit } = req.query;
+
+  if (auth !== 0) {
+    const result = {
+      status: 403,
+      message: '권한 없음!',
+    };
+
+    res.status(403).json(result);
+
+    return;
+  }
+
+  if (!page || !limit || !category) {
+    const result = {
+      status: 400,
+      message: 'page or limit or category를 지정 하세요!',
+    };
+
+    res.status(400).json(result);
+
+    return;
+  }
+
+  try {
+    const requestPage = (page - 1) * limit;
+    limit = Number(limit);
+
+    const question = await models.Question.getByCategory(0, category, requestPage, limit);
+
+    const result = {
+      status: 200,
+      message: '카테고리별 조회 성공! (어드민)',
+      data: {
+        question,
+      },
+    };
+
+    res.status(200).json(result);
+  } catch (error) {
+    colorConsole.error(error);
+    const result = {
+      status: 500,
+      message: '서버 에러!',
+    };
+
+    res.status(500).json(result);
+  }
+};
+
 exports.getDetailQuestion = async (req, res) => {
   const { idx } = req.query;
 

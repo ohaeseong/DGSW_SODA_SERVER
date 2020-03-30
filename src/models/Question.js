@@ -25,6 +25,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(50),
       allowNull: true,
     },
+    /** 카테고리 */
+    category: {
+      field: 'category',
+      type: DataTypes.STRING(50),
+      allowNull: false,
+    },
     /** 해결 여부 알려주는 컬럼 */
     isComplate: {
       field: 'is_complate',
@@ -98,6 +104,44 @@ module.exports = (sequelize, DataTypes) => {
     raw: true,
   });
 
+  // eslint-disable-next-line consistent-return
+  Question.getByCategory = (isComplate, category, requestPage, limit) => {
+    if (isComplate === 1) {
+      return Question.findAll({
+        offset: requestPage,
+        limit,
+        where: {
+          isComplate,
+          category,
+        },
+
+        order: [
+          ['joinDate', 'DESC'],
+        ],
+
+        raw: true,
+      });
+    }
+
+    if (isComplate === 0) {
+      return Question.findAll({
+        offset: requestPage,
+        limit,
+        where: {
+          isComplate,
+          category,
+        },
+
+        order: [
+          ['joinDate', 'DESC'],
+        ],
+
+        raw: true,
+      });
+    }
+  };
+
+  // eslint-disable-next-line consistent-return
   Question.getIsComplateQuestion = (isComplate, requestPage, limit) => {
     if (isComplate === 1) {
       return Question.findAll({

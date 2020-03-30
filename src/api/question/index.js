@@ -6,6 +6,8 @@ const authMiddleWare = require('../../middleware/auth');
 question.post('/', authMiddleWare, questionCtrl.writeQuestion);
 question.get('/', authMiddleWare, questionCtrl.getQuestions);
 question.get('/admin', authMiddleWare, questionCtrl.getAdminQuestion);
+question.get('/category', authMiddleWare, questionCtrl.getByCategory);
+question.get('/admin/category', authMiddleWare, questionCtrl.getByAdminCategory);
 question.get('/detail', authMiddleWare, questionCtrl.getDetailQuestion);
 question.put('/', authMiddleWare, questionCtrl.updateQuestion);
 question.delete('/', authMiddleWare, questionCtrl.deleteQuestion);

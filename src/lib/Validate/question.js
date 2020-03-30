@@ -5,6 +5,7 @@ exports.validateWriteQuestion = async (body) => {
   const schema = Joi.object().keys({
     title: Joi.string().required(),
     contents: Joi.string().required(),
+    category: Joi.string().required(),
     picture: Joi.any().allow(null),
   });
   // eslint-disable-next-line no-useless-catch
