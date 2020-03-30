@@ -7,7 +7,8 @@ const colorConsole = require('../../lib/log');
 exports.writeQuestion = async (req, res) => {
   const { body } = req;
   const { memberId } = req.decoded;
-
+  console.log(body);
+  
   try {
     await validate.validateWriteQuestion(body);
   } catch (error) {

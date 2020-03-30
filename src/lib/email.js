@@ -58,7 +58,7 @@ exports.sendEmailCode = (email, code) => {
       <div style="
           font-size: 17px;
           margin: 40px 0px 0px 30px;">
-        DGSW-SODA는 "대소고 소통의 다리"의 약자로 학교 내에 대나무 숲, 커뮤니티 팀빌딩 등 다양한 기능들을 제공 합니다.
+        ㅎㅇ!
       </div>
       <div style="
         font-size: 35px;

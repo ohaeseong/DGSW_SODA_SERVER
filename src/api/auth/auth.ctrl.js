@@ -268,4 +268,4 @@ exports.checkMemberId = async (req, res) => {
 
     res.status(500).json(result);
   }
-}
+};
