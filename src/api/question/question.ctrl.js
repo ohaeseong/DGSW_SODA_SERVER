@@ -2,6 +2,7 @@ const models = require('../../models');
 const validate = require('../../lib/Validate/question');
 const file = require('../../lib/file');
 const colorConsole = require('../../lib/log');
+const { asyncForeach } = require('../../lib/method');
 
 // 문의 작성
 exports.writeQuestion = async (req, res) => {
@@ -88,7 +89,6 @@ exports.writeQuestion = async (req, res) => {
 
 // 문의 조회
 exports.getQuestions = async (req, res) => {
-  const { memberId } = req.decoded;
   const { page } = req.query;
   let { limit } = req.query;
 
@@ -107,15 +107,27 @@ exports.getQuestions = async (req, res) => {
     const requestPage = (page - 1) * limit;
     limit = Number(limit);
 
-    const question = await models.Question.getMyQuestion(memberId, requestPage, limit);
-    const complateQuestion = await models.Question.getIsComplateQuestion(1, requestPage, limit);
+    const question = await models.Question.getIsComplateQuestion(1, requestPage, limit);
+
+    await asyncForeach(question, async (value) => {
+      const { idx } = value;
+
+      const fileData = await models.QuestionFile.getByQuestionIdx(idx);
+
+      await file.creatImageUrl(fileData);
+
+      if (fileData.length > 0) {
+        value.picture = fileData;
+      } else {
+        value.picture = null;
+      }
+    });
 
     const result = {
       status: 200,
       message: '문의 리스트 조회 성공!',
       data: {
         question,
-        complateQuestion,
       },
     };
 
@@ -164,6 +176,34 @@ exports.getAdminQuestion = async (req, res) => {
     const question = await models.Question.getIsComplateQuestion(0, requestPage, limit);
     const allQuestion = await models.Question.getAllQuestion(requestPage, limit);
 
+    await asyncForeach(question, async (value) => {
+      const { idx } = value;
+
+      const fileData = await models.QuestionFile.getByQuestionIdx(idx);
+
+      await file.creatImageUrl(fileData);
+
+      if (fileData.length > 0) {
+        value.picture = fileData;
+      } else {
+        value.picture = null;
+      }
+    });
+
+    await asyncForeach(allQuestion, async (value) => {
+      const { idx } = value;
+
+      const fileData = await models.QuestionFile.getByQuestionIdx(idx);
+
+      await file.creatImageUrl(fileData);
+
+      if (fileData.length > 0) {
+        value.picture = fileData;
+      } else {
+        value.picture = null;
+      }
+    });
+
     const result = {
       status: 200,
       message: '조회 성공!',
@@ -204,11 +244,70 @@ exports.getByCategory = async (req, res) => {
     const requestPage = (page - 1) * limit;
     limit = Number(limit);
 
-    const question = await models.Question.getByCategory(0, category, requestPage, limit);
+    const question = await models.Question.getByCategory(1, category, requestPage, limit);
+
+    await asyncForeach(question, async (value) => {
+      const { idx } = value;
+
+      const fileData = await models.QuestionFile.getByQuestionIdx(idx);
+
+      await file.creatImageUrl(fileData);
+
+      if (fileData.length > 0) {
+        value.picture = fileData;
+      } else {
+        value.picture = null;
+      }
+    });
 
     const result = {
       status: 200,
       message: '카테고리별 조회 성공!',
+      data: {
+        question,
+      },
+    };
+
+    res.status(200).json(result);
+  } catch (error) {
+    colorConsole.error(error);
+    const result = {
+      status: 500,
+      message: '서버 에러!',
+    };
+
+    res.status(500).json(result);
+  }
+};
+
+exports.getMyQuestion = async (req, res) => {
+  const { memberId } = req.decoded;
+  const { page } = req.query;
+  let { limit } = req.query;
+
+  try {
+    const requestPage = (page - 1) * limit;
+    limit = Number(limit);
+
+    const question = await models.Question.getMyQuestion(memberId, requestPage, limit);
+
+    await asyncForeach(question, async (value) => {
+      const { idx } = value;
+
+      const fileData = await models.QuestionFile.getByQuestionIdx(idx);
+
+      await file.creatImageUrl(fileData);
+
+      if (fileData.length > 0) {
+        value.picture = fileData;
+      } else {
+        value.picture = null;
+      }
+    });
+
+    const result = {
+      status: 200,
+      message: '내가 작성한 질문 조회 성공!',
       data: {
         question,
       },
@@ -259,6 +358,20 @@ exports.getByAdminCategory = async (req, res) => {
 
     const question = await models.Question.getByCategory(0, category, requestPage, limit);
 
+    await asyncForeach(question, async (value) => {
+      const { idx } = value;
+
+      const fileData = await models.QuestionFile.getByQuestionIdx(idx);
+
+      await file.creatImageUrl(fileData);
+
+      if (fileData.length > 0) {
+        value.picture = fileData;
+      } else {
+        value.picture = null;
+      }
+    });
+
     const result = {
       status: 200,
       message: '카테고리별 조회 성공! (어드민)',
@@ -307,7 +420,19 @@ exports.getDetailQuestion = async (req, res) => {
       return;
     }
 
-    const answer = await models.Answer.getByQuestionIdx(question.idx);
+    await asyncForeach(question, async (value) => {
+      const fileData = await models.QuestionFile.getByQuestionIdx(idx);
+
+      await file.creatImageUrl(fileData);
+
+      if (fileData.length > 0) {
+        value.picture = fileData;
+      } else {
+        value.picture = null;
+      }
+    });
+
+    const answer = await models.Answer.getByQuestionIdx(idx);
 
     const result = {
       status: 200,

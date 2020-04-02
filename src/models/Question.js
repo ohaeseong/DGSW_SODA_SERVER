@@ -66,7 +66,7 @@ module.exports = (sequelize, DataTypes) => {
     raw: true,
   });
 
-  Question.getByIdx = (idx) => Question.findOne({
+  Question.getByIdx = (idx) => Question.findAll({
     where: {
       idx,
     },
