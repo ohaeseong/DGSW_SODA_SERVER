@@ -37,9 +37,9 @@ server.listen(port, () => {
 
 try {
   const option = {
-    ca: fs.readFileSync('/etc/letsencrypt/fullchain.pem'),
-    key: fs.readFileSync(path.resolve(process.cwd(), '/etc/letsencrypt/privkey.pem'), 'utf8').toString(),
-    cert: fs.readFileSync(path.resolve(process.cwd(), '/etc/letsencrypt/cert.pem'), 'utf8').toString(),
+    ca: fs.readFileSync('/etc/letsencrypt/live/fullchain.pem'),
+    key: fs.readFileSync(path.resolve(process.cwd(), '/etc/letsencrypt/live/privkey.pem'), 'utf8').toString(),
+    cert: fs.readFileSync(path.resolve(process.cwd(), '/etc/letsencrypt/live/cert.pem'), 'utf8').toString(),
   };
 
   HTTPS.createServer(option, app).listen(sslport, () => {
