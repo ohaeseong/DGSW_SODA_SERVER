@@ -156,6 +156,103 @@ exports.registerAccount = async (req, res) => {
   }
 };
 
+exports.findId = async (req, res) => {
+  const { body } = req;
+
+  try {
+    await validate.validateUserEmail(body);
+  } catch (error) {
+    log.error(error);
+
+    const result = {
+      status: 400,
+      message: '이메일 검증 에러!',
+    };
+
+    res.status(400).json(result);
+
+    return;
+  }
+
+  try {
+    const member = await models.Member.findMemberByEmail(body.email);
+
+    if (!member) {
+      const result = {
+        status: 403,
+        message: '해당 이메일로 가입된 데이터가 없습니다!',
+      };
+
+      res.status(403).json(result);
+
+      return;
+    }
+
+    await emailLib.sendEmailUserId(body.email, member.memberId);
+
+    const result = {
+      status: 200,
+      message: '사용자 id 정보 이메일 보내기 성공!',
+    };
+
+    res.status(200).json(result);
+  } catch (error) {
+    log.error(error);
+
+    const result = {
+      status: 500,
+      message: '서버 에러!',
+    };
+
+    res.status(500).json(result);
+  }
+};
+
+exports.findPw = async (req, res) => {
+  const { body } = req;
+
+  try {
+    await validate.validateUserEmail(body);
+  } catch (error) {
+    log.error(error);
+
+    const result = {
+      status: 400,
+      message: 'email 검증 오류!',
+    };
+
+    res.status(400).json(result);
+
+    return;
+  }
+
+  try {
+    const member = await models.Member.findMemberByEmail(body.email);
+
+    if (!member) {
+      const result = {
+        status: 403,
+        message: '해당 이메일로 가입된 데이터가 없습니다!',
+      };
+
+      res.status(403).json(result);
+
+      return;
+    }
+
+
+  } catch (error) {
+    log.error(error);
+
+    const result = {
+      status: 500,
+      message: '서버 에러!',
+    };
+
+    res.status(500).json(result);
+  }
+};
+
 exports.emailVerify = async (req, res) => {
   const { email } = req.body;
   let verifyEmail = null;

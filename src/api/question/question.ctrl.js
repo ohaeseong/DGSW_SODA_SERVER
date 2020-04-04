@@ -407,9 +407,9 @@ exports.getDetailQuestion = async (req, res) => {
   }
 
   try {
-    const question = await models.Question.getByIdx(idx);
+    const questionData = await models.Question.getByIdx(idx);
 
-    if (!question) {
+    if (!questionData) {
       const result = {
         status: 404,
         message: '존재하지 않는 문의!',
@@ -420,7 +420,7 @@ exports.getDetailQuestion = async (req, res) => {
       return;
     }
 
-    await asyncForeach(question, async (value) => {
+    await asyncForeach(questionData, async (value) => {
       const fileData = await models.QuestionFile.getByQuestionIdx(idx);
 
       await file.creatImageUrl(fileData);
@@ -433,6 +433,8 @@ exports.getDetailQuestion = async (req, res) => {
     });
 
     const answer = await models.Answer.getByQuestionIdx(idx);
+
+    const question = questionData[0];
 
     const result = {
       status: 200,

@@ -19,3 +19,15 @@ exports.validateRegisterUser = async (body) => {
     throw error;
   }
 };
+
+exports.validateUserEmail = async (body) => {
+  const schema = Joi.object().keys({
+    email: Joi.string().email().required(),
+  });
+  // eslint-disable-next-line no-useless-catch
+  try {
+    return await Joi.validate(body, schema);
+  } catch (error) {
+    throw error;
+  }
+};
