@@ -38,7 +38,7 @@ server.listen(port, () => {
 try {
   const option = {
     ca: fs.readFileSync('/etc/letsencrypt/live/takeup.co.kr/fullchain.pem'),
-    key: fs.readFileSync(path.resolve(process.cwd(), '/etc/letsencrypt/takeup.co.kr/live/privkey.pem'), 'utf8').toString(),
+    key: fs.readFileSync(path.resolve(process.cwd(), '/etc/letsencrypt/live/takeup.co.kr/privkey.pem'), 'utf8').toString(),
     cert: fs.readFileSync(path.resolve(process.cwd(), '/etc/letsencrypt/live/takeup.co.kr/cert.pem'), 'utf8').toString(),
   };
 
