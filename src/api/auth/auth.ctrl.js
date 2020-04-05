@@ -335,8 +335,19 @@ exports.emailVerify = async (req, res) => {
 exports.checkMemberId = async (req, res) => {
   const { memberId } = req.body;
 
+  if (!memberId) {
+    const result = {
+      status: 400,
+      message: 'memberId값을 입력 하세요',
+    };
+
+    res.status(400).json(result);
+
+    return;
+  }
+
   try {
-    const member = await models.Member.checkId(memberId);
+    const member = await models.Member.findRegisterMemberId(memberId);
 
     if (member) {
       const result = {
