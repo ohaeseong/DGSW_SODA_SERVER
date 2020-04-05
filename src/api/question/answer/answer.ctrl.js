@@ -5,8 +5,7 @@ const colorConsole = require('../../../lib/log');
 exports.writeAnswer = async (req, res) => {
   const { body } = req;
   const { memberId, auth } = req.decoded;
-  console.log(body);
-  
+
   if (auth !== 0) {
     const result = {
       status: 403,
@@ -35,11 +34,11 @@ exports.writeAnswer = async (req, res) => {
     const answer = await models.Answer.getByQuestionIdx(body.questionIdx);
     if (answer) {
       const result = {
-        status: 400,
+        status: 403,
         message: '이미 답변이 달린 질문입니다!',
       };
 
-      res.status(400).json(result);
+      res.status(403).json(result);
 
       return;
     }
