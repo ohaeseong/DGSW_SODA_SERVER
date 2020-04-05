@@ -5,7 +5,8 @@ const colorConsole = require('../../../lib/log');
 exports.writeAnswer = async (req, res) => {
   const { body } = req;
   const { memberId, auth } = req.decoded;
-
+  console.log(body);
+  
   if (auth !== 0) {
     const result = {
       status: 403,
@@ -31,7 +32,6 @@ exports.writeAnswer = async (req, res) => {
   }
 
   try {
-
     const answer = await models.Answer.getByQuestionIdx(body.questionIdx);
     if (answer) {
       const result = {
