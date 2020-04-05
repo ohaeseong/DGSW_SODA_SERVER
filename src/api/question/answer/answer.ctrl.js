@@ -31,6 +31,19 @@ exports.writeAnswer = async (req, res) => {
   }
 
   try {
+
+    const answer = await models.Answer.getByQuestionIdx(body.questionIdx);
+    if (answer) {
+      const result = {
+        status: 400,
+        message: '이미 답변이 달린 질문입니다!',
+      };
+
+      res.status(400).json(result);
+
+      return;
+    }
+
     await models.Answer.create({
       ...body,
       memberId,
