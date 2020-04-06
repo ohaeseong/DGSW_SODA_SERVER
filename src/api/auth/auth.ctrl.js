@@ -216,6 +216,9 @@ exports.emailVerify = async (req, res) => {
   const { email } = req.body;
   let verifyEmail = null;
 
+  console.log(email);
+  
+
   if (!email) {
     const result = {
       status: 400,
