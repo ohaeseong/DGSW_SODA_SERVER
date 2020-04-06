@@ -1,7 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 require('dotenv').config();
 
-const EmailValidator = require('email-deep-validator');
 const crypto = require('crypto');
 const log = require('../../lib/log');
 const models = require('../../models');
@@ -214,7 +213,6 @@ exports.findPw = async (req, res) => {
 
 exports.emailVerify = async (req, res) => {
   const { email } = req.body;
-  let verifyEmail = null;
 
   if (!email) {
     const result = {
@@ -228,32 +226,19 @@ exports.emailVerify = async (req, res) => {
   }
 
   try {
-    const emailValidator = new EmailValidator();
-    const { validMailbox } = await emailValidator.verify(email);
-    console.log(validMailbox);
-    
-    // eslint-disable-next-line no-async-promise-executor
-    // const promise = new Promise(async (resolve, reject) => {
-    //  await verifier.verify(email, (error, info) => {
-    //    if (error) {
-    //      console.log(error);
-    //    }
-    //    resolve(info.success);
-    //  });
-    // });
+    await validate.validateUserEmail(req.body);
+  } catch (error) {
+    const result = {
+      status: 403,
+      message: '유효하지 않은 이메일 입니다!',
+    };
 
-    verifyEmail = validMailbox;
+    res.status(403).json(result);
 
-    if (verifyEmail === false) {
-      const result = {
-        status: 403,
-        message: '유효하지 않은 이메일 입니다!',
-      };
+    return;
+  }
 
-      res.status(403).json(result);
-
-      return;
-    }
+  try {
     const emailData = await models.Member.findMemberByEmail(email);
     if (emailData) {
       const result = {
