@@ -231,6 +231,9 @@ exports.emailVerify = async (req, res) => {
     // eslint-disable-next-line no-async-promise-executor
     const promise = new Promise(async (resolve, reject) => {
       await verifier.verify(email, (error, info) => {
+        if (error) {
+          console.log(error);
+        }
         resolve(info.success);
       });
     });
