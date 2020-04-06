@@ -242,6 +242,8 @@ exports.emailVerify = async (req, res) => {
 
     verifyEmail = await promise;
 
+    console.log('test3');
+
     if (verifyEmail === false) {
       const result = {
         status: 403,
