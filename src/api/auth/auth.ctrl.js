@@ -209,56 +209,12 @@ exports.findId = async (req, res) => {
 };
 
 exports.findPw = async (req, res) => {
-  const { body } = req;
 
-  try {
-    await validate.validateUserEmail(body);
-  } catch (error) {
-    log.error(error);
-
-    const result = {
-      status: 400,
-      message: 'email 검증 오류!',
-    };
-
-    res.status(400).json(result);
-
-    return;
-  }
-
-  try {
-    const member = await models.Member.findMemberByEmail(body.email);
-
-    if (!member) {
-      const result = {
-        status: 403,
-        message: '해당 이메일로 가입된 데이터가 없습니다!',
-      };
-
-      res.status(403).json(result);
-
-      return;
-    }
-
-
-  } catch (error) {
-    log.error(error);
-
-    const result = {
-      status: 500,
-      message: '서버 에러!',
-    };
-
-    res.status(500).json(result);
-  }
 };
 
 exports.emailVerify = async (req, res) => {
   const { email } = req.body;
   let verifyEmail = null;
-
-  console.log(email);
-  
 
   if (!email) {
     const result = {
