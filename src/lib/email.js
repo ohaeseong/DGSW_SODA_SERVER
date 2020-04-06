@@ -10,6 +10,9 @@ exports.createEmailCode = async () => {
 };
 
 exports.sendEmailCode = (email, code) => {
+
+  console.log(account, email);
+
   const transporter = nodeMailer.createTransport({ // 보내는 사람 설정
     service: 'gmail',
     port: 587,
