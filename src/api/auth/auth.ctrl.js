@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 require('dotenv').config();
 
-const verifier = require('email-verify');
+const EmailValidator = require('email-deep-validator');
 const crypto = require('crypto');
 const log = require('../../lib/log');
 const models = require('../../models');
@@ -228,21 +228,20 @@ exports.emailVerify = async (req, res) => {
   }
 
   try {
-    console.log('test2');
+    const emailValidator = new EmailValidator();
+    const { validMailbox } = await emailValidator.verify(email);
 
     // eslint-disable-next-line no-async-promise-executor
     // const promise = new Promise(async (resolve, reject) => {
-    //   await verifier.verify(email, (error, info) => {
-    //     if (error) {
-    //       console.log(error);
-    //     }
-    //     resolve(info.success);
-    //   });
+    //  await verifier.verify(email, (error, info) => {
+    //    if (error) {
+    //      console.log(error);
+    //    }
+    //    resolve(info.success);
+    //  });
     // });
 
-    verifyEmail = true;
-
-    console.log('test3');
+    verifyEmail = validMailbox;
 
     if (verifyEmail === false) {
       const result = {
@@ -265,12 +264,9 @@ exports.emailVerify = async (req, res) => {
 
       return;
     }
-    console.log('test');
 
     let emailCode = await emailLib.createEmailCode();
     emailCode = String(emailCode);
-
-    console.log(emailCode);
 
     await emailLib.sendEmailCode(email, emailCode);
 
