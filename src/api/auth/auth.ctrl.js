@@ -261,9 +261,12 @@ exports.emailVerify = async (req, res) => {
 
       return;
     }
+    console.log('test');
 
     let emailCode = await emailLib.createEmailCode();
     emailCode = String(emailCode);
+
+    console.log(emailCode);
 
     await emailLib.sendEmailCode(email, emailCode);
 
