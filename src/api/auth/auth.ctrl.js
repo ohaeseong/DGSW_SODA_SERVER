@@ -299,6 +299,7 @@ exports.emailVerify = async (req, res) => {
 
       return;
     }
+    console.log(email);
 
     let emailCode = await emailLib.createEmailCode();
     emailCode = String(emailCode);
@@ -312,6 +313,9 @@ exports.emailVerify = async (req, res) => {
     const encrypted = cipher.update(emailCode);
 
     const cipherCode = `${iv.toString('hex')}:${encrypted.toString('hex')}`;
+
+    console.log('test');
+    
 
     const result = {
       status: 200,
