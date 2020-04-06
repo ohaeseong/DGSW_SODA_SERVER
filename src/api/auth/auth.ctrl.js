@@ -257,6 +257,9 @@ exports.emailVerify = async (req, res) => {
   const { email } = req.body;
   let verifyEmail = null;
 
+  console.log(email);
+  
+
   if (!email) {
     const result = {
       status: 400,
@@ -299,7 +302,6 @@ exports.emailVerify = async (req, res) => {
 
       return;
     }
-    console.log(email);
 
     let emailCode = await emailLib.createEmailCode();
     emailCode = String(emailCode);
@@ -313,9 +315,6 @@ exports.emailVerify = async (req, res) => {
     const encrypted = cipher.update(emailCode);
 
     const cipherCode = `${iv.toString('hex')}:${encrypted.toString('hex')}`;
-
-    console.log('test');
-    
 
     const result = {
       status: 200,
