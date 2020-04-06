@@ -90,6 +90,8 @@ exports.sendEmailCode = (email, code) => {
 };
 
 exports.sendEmailUserId = (email, userId) => {
+  console.log(account);
+  
   const transporter = nodeMailer.createTransport({ // 보내는 사람 설정
     service: 'gmail',
     port: 587,
