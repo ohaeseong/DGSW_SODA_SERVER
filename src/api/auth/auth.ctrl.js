@@ -206,8 +206,21 @@ exports.findId = async (req, res) => {
   }
 };
 
-exports.findPw = async (req, res) => {
+exports.findPwSendEmail = async (req, res) => {
   const { email } = req.body;
+
+  try {
+    await validate.validateUserEmail(req.body);
+  } catch (error) {
+    const result = {
+      status: 400,
+      message: '유효하지 않은 이메일 입니다!',
+    };
+
+    res.status(400).json(result);
+
+    return;
+  }
 
   try {
     const member = await models.Member.findMemberByEmail(email);
@@ -222,7 +235,71 @@ exports.findPw = async (req, res) => {
       return;
     }
 
-    
+    const verify = await models.EmailVerify.findeEmailCode(email);
+    if (verify) {
+      await models.EmailVerify.destroy({
+        where: {
+          email,
+        },
+      });
+    }
+
+    let emailCode = await emailLib.createEmailCode();
+    emailCode = String(emailCode);
+
+    await emailLib.sendEmailCode(email, emailCode);
+
+    await models.EmailVerify.create({
+      email,
+      code: emailCode,
+    });
+
+    const result = {
+      status: 200,
+      message: '이메일 코드 보내기 성공!',
+    };
+
+    res.status(200).json(result);
+  } catch (error) {
+    log.error(error);
+
+    const result = {
+      status: 500,
+      message: '서버 에러!',
+    };
+
+    res.status(500).json(result);
+  }
+};
+
+exports.resetPw = async (req, res) => {
+  const { memberId, pw } = req.body;
+
+  if (!pw) {
+    const result = {
+      status: 400,
+      message: '비밀번호를 입력하세요!',
+    };
+
+    res.status(400).json(result);
+
+    return;
+  }
+  try {
+    await models.Member.update({
+      pw,
+    }, {
+      where: {
+        memberId,
+      },
+    });
+
+    const result = {
+      status: 200,
+      message: '비밀번호 변경 성공!',
+    };
+
+    res.status(200).json(result);
   } catch (error) {
     log.error(error);
 
