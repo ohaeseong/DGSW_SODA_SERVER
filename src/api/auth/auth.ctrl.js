@@ -77,7 +77,9 @@ exports.login = async (req, res) => {
 exports.registerAccount = async (req, res) => {
   const { body } = req;
   const requestAddress = req.get('host');
-
+  if (!body.profileImage) {
+    body.profileImage = null;
+  }
   try {
     await validate.validateRegisterUser(body);
   } catch (error) {
