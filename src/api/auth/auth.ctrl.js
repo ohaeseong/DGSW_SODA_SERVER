@@ -208,10 +208,23 @@ exports.findId = async (req, res) => {
 };
 
 exports.findPw = async (req, res) => {
+  const { memberId } = req.body;
 
+  try {
+
+  } catch (error) {
+    log.error(error);
+
+    const result = {
+      status: 500,
+      message: '서버 에러!',
+    };
+
+    res.status(500).json(result);
+  }
 };
 
-exports.emailVerify = async (req, res) => {
+exports.sendEmail = async (req, res) => {
   const { email } = req.body;
 
   if (!email) {
@@ -251,6 +264,14 @@ exports.emailVerify = async (req, res) => {
       return;
     }
 
+    const verify = await models.EmailVerify.findeEmailCode(email);
+    if (verify) {
+      await models.EmailVerify.destroy({
+        where: {
+          email,
+        },
+      });
+    }
     let emailCode = await emailLib.createEmailCode();
     emailCode = String(emailCode);
 
@@ -264,10 +285,79 @@ exports.emailVerify = async (req, res) => {
 
     const cipherCode = `${iv.toString('hex')}:${encrypted.toString('hex')}`;
 
+    const textParts = cipherCode.split(':'); // 암호화된 코드로 부터 iv길이 할당 text == 암호
+    const iva = Buffer.from(textParts.shift(), 'hex');// 암호화된 코드로 부터 iv길이 할당 ASCII CODE
+    const encryptedText = Buffer.from(textParts.join(':'), 'hex');// 암호화 된 코드 가져오기 ASCII CODE
+    const decipher = crypto.createDecipheriv('aes-256-ctr', Buffer.from(emailSecretCode), iva); // 복호화
+    let decrypted = decipher.update(encryptedText); // 복호화
+    decrypted = Buffer.concat([decrypted, decipher.final()]); // Buffer 형식 바꾸기
+
+    const code = decrypted.toString(); // 복호화 된 암호 코드
+
+    await models.EmailVerify.create({
+      email,
+      code,
+    });
+
     const result = {
       status: 200,
       message: '이메일 코드 보내기 성공!',
       cipherCode,
+    };
+
+    res.status(200).json(result);
+  } catch (error) {
+    log.error(error);
+
+    const result = {
+      status: 500,
+      message: '서버 에러!',
+    };
+
+    res.status(500).json(result);
+  }
+};
+
+exports.verifyEmailCode = async (req, res) => {
+  const { email, code } = req.body;
+
+  if (!email || !code) {
+    const result = {
+      status: 400,
+      message: '이메일 혹은 코드를 보내주세요!',
+    };
+
+    res.status(400).json(result);
+    return;
+  }
+  try {
+    // 코드 복호화
+    emailSecretCode = crypto.createHash('sha256').update(String(emailSecret)).digest('base64').substr(0, 32);
+    const textParts = code.split(':'); // 암호화된 코드로 부터 iv길이 할당 text == 암호
+    const iva = Buffer.from(textParts.shift(), 'hex');// 암호화된 코드로 부터 iv길이 할당 ASCII CODE
+    const encryptedText = Buffer.from(textParts.join(':'), 'hex');// 암호화 된 코드 가져오기 ASCII CODE
+    const decipher = crypto.createDecipheriv('aes-256-ctr', Buffer.from(emailSecretCode), iva); // 복호화
+    let decrypted = decipher.update(encryptedText); // 복호화
+    decrypted = Buffer.concat([decrypted, decipher.final()]); // Buffer 형식 바꾸기
+
+    const decryptCode = decrypted.toString(); // 복호화 된 암호 코드
+
+    const verify = await models.EmailVerify.verifyCode(email, decryptCode);
+
+    if (!verify) {
+      const result = {
+        status: 403,
+        message: '코드 검증 실패!',
+      };
+
+      res.status(403).json(result);
+
+      return;
+    }
+
+    const result = {
+      status: 200,
+      message: '검증 성공!!',
     };
 
     res.status(200).json(result);
