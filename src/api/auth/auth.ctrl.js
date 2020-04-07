@@ -9,7 +9,6 @@ const validate = require('../../lib/Validate/member');
 const emailLib = require('../../lib/email');
 
 const { EMAIL_CODE_SECRET: emailSecret } = process.env;
-let emailSecretCode = null;
 
 exports.login = async (req, res) => {
   const { id, pw } = req.body;
@@ -208,10 +207,22 @@ exports.findId = async (req, res) => {
 };
 
 exports.findPw = async (req, res) => {
-  const { memberId } = req.body;
+  const { email } = req.body;
 
   try {
+    const member = await models.Member.findMemberByEmail(email);
 
+    if (!member) {
+      const result = {
+        status: 403,
+        message: '가입된 데이터가 없음!',
+      };
+
+      res.status(403).json(result);
+      return;
+    }
+
+    
   } catch (error) {
     log.error(error);
 
@@ -277,32 +288,31 @@ exports.sendEmail = async (req, res) => {
 
     await emailLib.sendEmailCode(email, emailCode);
 
-    emailSecretCode = crypto.createHash('sha256').update(String(emailSecret)).digest('base64').substr(0, 32);
+    // emailSecretCode = crypto.createHash('sha256').update(String(emailSecret)).digest('base64').substr(0, 32);
 
-    const iv = crypto.randomBytes(16); // 암호화 길이 설정 aes-256-ctr의 경우 길이 16이여야 함
-    const cipher = crypto.createCipheriv('aes-256-ctr', Buffer.from(emailSecretCode), iv);
-    const encrypted = cipher.update(emailCode);
+    // const iv = crypto.randomBytes(16); // 암호화 길이 설정 aes-256-ctr의 경우 길이 16이여야 함
+    // const cipher = crypto.createCipheriv('aes-256-ctr', Buffer.from(emailSecretCode), iv);
+    // const encrypted = cipher.update(emailCode);
 
-    const cipherCode = `${iv.toString('hex')}:${encrypted.toString('hex')}`;
+    // const cipherCode = `${iv.toString('hex')}:${encrypted.toString('hex')}`;
 
-    const textParts = cipherCode.split(':'); // 암호화된 코드로 부터 iv길이 할당 text == 암호
-    const iva = Buffer.from(textParts.shift(), 'hex');// 암호화된 코드로 부터 iv길이 할당 ASCII CODE
-    const encryptedText = Buffer.from(textParts.join(':'), 'hex');// 암호화 된 코드 가져오기 ASCII CODE
-    const decipher = crypto.createDecipheriv('aes-256-ctr', Buffer.from(emailSecretCode), iva); // 복호화
-    let decrypted = decipher.update(encryptedText); // 복호화
-    decrypted = Buffer.concat([decrypted, decipher.final()]); // Buffer 형식 바꾸기
+    // const textParts = cipherCode.split(':'); // 암호화된 코드로 부터 iv길이 할당 text == 암호
+    // const iva = Buffer.from(textParts.shift(), 'hex');// 암호화된 코드로 부터 iv길이 할당 ASCII CODE
+    // const encryptedText = Buffer.from(textParts.join(':'), 'hex');// 암호화 된 코드 가져오기 ASCII CODE
+    // const decipher = crypto.createDecipheriv('aes-256-ctr', Buffer.from(emailSecretCode), iva); // 복호화
+    // let decrypted = decipher.update(encryptedText); // 복호화
+    // decrypted = Buffer.concat([decrypted, decipher.final()]); // Buffer 형식 바꾸기
 
-    const code = decrypted.toString(); // 복호화 된 암호 코드
+    // const code = decrypted.toString(); // 복호화 된 암호 코드
 
     await models.EmailVerify.create({
       email,
-      code,
+      code: emailCode,
     });
 
     const result = {
       status: 200,
       message: '이메일 코드 보내기 성공!',
-      cipherCode,
     };
 
     res.status(200).json(result);
@@ -332,17 +342,17 @@ exports.verifyEmailCode = async (req, res) => {
   }
   try {
     // 코드 복호화
-    emailSecretCode = crypto.createHash('sha256').update(String(emailSecret)).digest('base64').substr(0, 32);
-    const textParts = code.split(':'); // 암호화된 코드로 부터 iv길이 할당 text == 암호
-    const iva = Buffer.from(textParts.shift(), 'hex');// 암호화된 코드로 부터 iv길이 할당 ASCII CODE
-    const encryptedText = Buffer.from(textParts.join(':'), 'hex');// 암호화 된 코드 가져오기 ASCII CODE
-    const decipher = crypto.createDecipheriv('aes-256-ctr', Buffer.from(emailSecretCode), iva); // 복호화
-    let decrypted = decipher.update(encryptedText); // 복호화
-    decrypted = Buffer.concat([decrypted, decipher.final()]); // Buffer 형식 바꾸기
+    // emailSecretCode = crypto.createHash('sha256').update(String(emailSecret)).digest('base64').substr(0, 32);
+    // const textParts = code.split(':'); // 암호화된 코드로 부터 iv길이 할당 text == 암호
+    // const iva = Buffer.from(textParts.shift(), 'hex');// 암호화된 코드로 부터 iv길이 할당 ASCII CODE
+    // const encryptedText = Buffer.from(textParts.join(':'), 'hex');// 암호화 된 코드 가져오기 ASCII CODE
+    // const decipher = crypto.createDecipheriv('aes-256-ctr', Buffer.from(emailSecretCode), iva); // 복호화
+    // let decrypted = decipher.update(encryptedText); // 복호화
+    // decrypted = Buffer.concat([decrypted, decipher.final()]); // Buffer 형식 바꾸기
 
-    const decryptCode = decrypted.toString(); // 복호화 된 암호 코드
+    // const decryptCode = decrypted.toString(); // 복호화 된 암호 코드
 
-    const verify = await models.EmailVerify.verifyCode(email, decryptCode);
+    const verify = await models.EmailVerify.verifyCode(email, code);
 
     if (!verify) {
       const result = {
