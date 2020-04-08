@@ -90,6 +90,14 @@ module.exports = (sequelize, DataTypes) => {
     raw: true,
   });
 
+  Question.getAllQuestionForData = () => Question.findAll({
+    order: [
+      ['joinDate', 'DESC'],
+    ],
+
+    raw: true,
+  });
+
   Question.getMyQuestion = (memberId, requestPage, limit) => Question.findAll({
     offset: requestPage,
     limit,

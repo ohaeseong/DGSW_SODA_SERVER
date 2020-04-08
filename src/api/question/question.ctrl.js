@@ -108,27 +108,16 @@ exports.getQuestions = async (req, res) => {
     limit = Number(limit);
 
     const question = await models.Question.getIsComplateQuestion(requestPage, limit);
+    const questionAll = await models.Question.getAllQuestionForData();
 
-    await asyncForeach(question, async (value) => {
-      const { idx } = value;
-
-      const fileData = await models.QuestionFile.getByQuestionIdx(idx);
-
-      await file.creatImageUrl(fileData);
-
-      if (fileData.length > 0) {
-        value.picture = fileData;
-      } else {
-        value.picture = null;
-      }
-    });
+    const totalPage = Math.ceil(questionAll.length / limit);
 
     const result = {
       status: 200,
       message: '문의 리스트 조회 성공!',
       data: {
         question,
-        page,
+        totalPage,
       },
     };
 
@@ -176,7 +165,9 @@ exports.getAdminQuestion = async (req, res) => {
 
     const question = await models.Question.getIsComplateQuestion(0, requestPage, limit);
     const allQuestion = await models.Question.getAllQuestion(requestPage, limit);
+    const questionAll = await models.Question.getAllQuestionForData();
 
+    const totalPage = Math.ceil(questionAll.length / limit);
     await asyncForeach(question, async (value) => {
       const { idx } = value;
 
@@ -211,7 +202,7 @@ exports.getAdminQuestion = async (req, res) => {
       data: {
         question,
         allQuestion,
-        page,
+        totalPage,
       },
     };
 
@@ -262,12 +253,16 @@ exports.getByCategory = async (req, res) => {
       }
     });
 
+    const questionAll = await models.Question.getAllQuestionForData();
+
+    const totalPage = Math.ceil(questionAll.length / limit);
+
     const result = {
       status: 200,
       message: '카테고리별 조회 성공!',
       data: {
         question,
-        page,
+        totalPage,
       },
     };
 
@@ -308,12 +303,16 @@ exports.getMyQuestion = async (req, res) => {
       }
     });
 
+    const questionAll = await models.Question.getAllQuestionForData();
+
+    const totalPage = Math.ceil(questionAll.length / limit);
+
     const result = {
       status: 200,
       message: '내가 작성한 질문 조회 성공!',
       data: {
         question,
-        page,
+        totalPage,
       },
     };
 
@@ -375,13 +374,16 @@ exports.getByAdminCategory = async (req, res) => {
         value.picture = null;
       }
     });
+    const questionAll = await models.Question.getAllQuestionForData();
+
+    const totalPage = Math.ceil(questionAll.length / limit);
 
     const result = {
       status: 200,
       message: '카테고리별 조회 성공! (어드민)',
       data: {
         question,
-        page,
+        totalPage,
       },
     };
 
