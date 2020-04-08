@@ -109,6 +109,7 @@ exports.getQuestions = async (req, res) => {
 
     const question = await models.Question.getIsComplateQuestion(requestPage, limit);
     const questionAll = await models.Question.getAllQuestionForData();
+    console.log(questionAll.length / limit);
 
     const totalPage = Math.ceil(questionAll.length / limit);
 
@@ -165,9 +166,8 @@ exports.getAdminQuestion = async (req, res) => {
 
     const question = await models.Question.getIsComplateQuestion(0, requestPage, limit);
     const allQuestion = await models.Question.getAllQuestion(requestPage, limit);
-    const questionAll = await models.Question.getAllQuestionForData();
 
-    const totalPage = Math.ceil(questionAll.length / limit);
+    const totalPage = Math.ceil(question.length / limit);
     await asyncForeach(question, async (value) => {
       const { idx } = value;
 
@@ -238,6 +238,9 @@ exports.getByCategory = async (req, res) => {
     limit = Number(limit);
 
     const question = await models.Question.getByCategory(category, requestPage, limit);
+    const questionAll = await models.Question.getByCategoryAllQuestion(category);
+
+    const totalPage = Math.ceil(questionAll.length / limit);
 
     await asyncForeach(question, async (value) => {
       const { idx } = value;
@@ -252,10 +255,6 @@ exports.getByCategory = async (req, res) => {
         value.picture = null;
       }
     });
-
-    const questionAll = await models.Question.getAllQuestionForData();
-
-    const totalPage = Math.ceil(questionAll.length / limit);
 
     const result = {
       status: 200,
@@ -359,7 +358,8 @@ exports.getByAdminCategory = async (req, res) => {
     const requestPage = (page - 1) * limit;
     limit = Number(limit);
 
-    const question = await models.Question.getByCategory(0, category, requestPage, limit);
+    const question = await models.Question.getByCategory(category, requestPage, limit);
+    const questionAll = await models.Question.getByCategoryAllQuestionAdmin(category);
 
     await asyncForeach(question, async (value) => {
       const { idx } = value;
@@ -374,7 +374,6 @@ exports.getByAdminCategory = async (req, res) => {
         value.picture = null;
       }
     });
-    const questionAll = await models.Question.getAllQuestionForData();
 
     const totalPage = Math.ceil(questionAll.length / limit);
 
