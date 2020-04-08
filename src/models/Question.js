@@ -105,76 +105,27 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   // eslint-disable-next-line consistent-return
-  Question.getByCategory = (isComplate, category, requestPage, limit) => {
-    if (isComplate === 1) {
-      return Question.findAll({
-        offset: requestPage,
-        limit,
-        where: {
-          isComplate,
-          category,
-        },
-
-        order: [
-          ['joinDate', 'DESC'],
-        ],
-
-        raw: true,
-      });
-    }
-
-    if (isComplate === 0) {
-      return Question.findAll({
-        offset: requestPage,
-        limit,
-        where: {
-          isComplate,
-          category,
-        },
-
-        order: [
-          ['joinDate', 'DESC'],
-        ],
-
-        raw: true,
-      });
-    }
-  };
+  Question.getByCategory = (category, requestPage, limit) => Question.findAll({
+    offset: requestPage,
+    limit,
+    where: {
+      category,
+    },
+    order: [
+      ['joinDate', 'DESC'],
+    ],
+    raw: true,
+  });
 
   // eslint-disable-next-line consistent-return
-  Question.getIsComplateQuestion = (isComplate, requestPage, limit) => {
-    if (isComplate === 1) {
-      return Question.findAll({
-        offset: requestPage,
-        limit,
-        where: {
-          isComplate,
-        },
-
-        order: [
-          ['joinDate', 'DESC'],
-        ],
-
-        raw: true,
-      });
-    }
-
-    if (isComplate === 0) {
-      return Question.findAll({
-        offset: requestPage,
-        limit,
-        where: {
-          isComplate,
-        },
-
-        order: [
-          ['joinDate', 'DESC'],
-        ],
-
-        raw: true,
-      });
-    }
-  };
+  Question.getIsComplateQuestion = (requestPage, limit) => Question.findAll({
+    offset: requestPage,
+    limit,
+    order: [
+      ['joinDate', 'DESC'],
+    ],
+    raw: true,
+  });
 
 
   return Question;

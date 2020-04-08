@@ -107,7 +107,7 @@ exports.getQuestions = async (req, res) => {
     const requestPage = (page - 1) * limit;
     limit = Number(limit);
 
-    const question = await models.Question.getIsComplateQuestion(1, requestPage, limit);
+    const question = await models.Question.getIsComplateQuestion(requestPage, limit);
 
     await asyncForeach(question, async (value) => {
       const { idx } = value;
@@ -128,6 +128,7 @@ exports.getQuestions = async (req, res) => {
       message: '문의 리스트 조회 성공!',
       data: {
         question,
+        page,
       },
     };
 
@@ -210,6 +211,7 @@ exports.getAdminQuestion = async (req, res) => {
       data: {
         question,
         allQuestion,
+        page,
       },
     };
 
@@ -244,7 +246,7 @@ exports.getByCategory = async (req, res) => {
     const requestPage = (page - 1) * limit;
     limit = Number(limit);
 
-    const question = await models.Question.getByCategory(1, category, requestPage, limit);
+    const question = await models.Question.getByCategory(category, requestPage, limit);
 
     await asyncForeach(question, async (value) => {
       const { idx } = value;
@@ -265,6 +267,7 @@ exports.getByCategory = async (req, res) => {
       message: '카테고리별 조회 성공!',
       data: {
         question,
+        page,
       },
     };
 
@@ -310,6 +313,7 @@ exports.getMyQuestion = async (req, res) => {
       message: '내가 작성한 질문 조회 성공!',
       data: {
         question,
+        page,
       },
     };
 
@@ -377,6 +381,7 @@ exports.getByAdminCategory = async (req, res) => {
       message: '카테고리별 조회 성공! (어드민)',
       data: {
         question,
+        page,
       },
     };
 
